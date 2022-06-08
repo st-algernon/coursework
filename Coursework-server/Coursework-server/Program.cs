@@ -9,21 +9,22 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 var tokenValidationParameters = new TokenValidationParameters
 {
-    ValidateIssuer = true,
-    ValidIssuer = JwtConfig.Issuer,
+	ValidateIssuer = true,
+	ValidIssuer = JwtConfig.Issuer,
 
-    ValidateAudience = true,
-    ValidAudience = JwtConfig.Audience,
+	ValidateAudience = true,
+	ValidAudience = JwtConfig.Audience,
 
-    ValidateLifetime = true,
+	ValidateLifetime = true,
 
-    ValidateIssuerSigningKey = true,
-    IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey()
+	ValidateIssuerSigningKey = true,
+	IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey()
 };
 
 // Add services to the container.
@@ -35,45 +36,44 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddNSwag();
+
 builder.Services.AddSwaggerGen(swagger =>
 {
-    swagger.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Title = "JWT Token Authentication API",
-        Description = "ASP.NET Core 5.0 Web API"
-    });
-    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer\"",
-    });
-    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement 
-    {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                new string[] {}
-            }
-        });
-    });
+	swagger.SwaggerDoc("v1", new OpenApiInfo
+	{
+		Version = "v1",
+		Title = "JWT Token Authentication API",
+		Description = "ASP.NET Core 5.0 Web API"
+	});
+	swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+	{
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey,
+		Scheme = "Bearer",
+		BearerFormat = "JWT",
+		In = ParameterLocation.Header,
+		Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer\"",
+	});
+	swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			new string[] { }
+		}
+	});
+});
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-builder.Services.AddSignalR(hubOptions =>
-{
-    hubOptions.EnableDetailedErrors = true;
-});
+builder.Services.AddSignalR(hubOptions => { hubOptions.EnableDetailedErrors = true; });
 builder.Services.AddSingleton<IUserIdProvider, UserIdAccessor>();
 
 builder.Services.AddSingleton(tokenValidationParameters);
@@ -90,43 +90,49 @@ builder.Services.AddTransient<StorageService>();
 builder.Services.AddTransient<JwtService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = tokenValidationParameters;
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
+	.AddJwtBearer(options =>
+	{
+		options.RequireHttpsMetadata = false;
+		options.TokenValidationParameters = tokenValidationParameters;
+		options.Events = new JwtBearerEvents
+		{
+			OnMessageReceived = context =>
+			{
+				var accessToken = context.Request.Query["access_token"];
+				var path = context.HttpContext.Request.Path;
 
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
-                {
-                    context.Token = accessToken;
-                }
+				if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+				{
+					context.Token = accessToken;
+				}
 
-                return Task.CompletedTask;
-            }
-        };
-    });
+				return Task.CompletedTask;
+			}
+		};
+	});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger(new Action<SwaggerOptions>(_ => { }));
+	app.UseSwaggerUI();
 }
 
-await AppDbInitializer.SeedAsync(app);
+if (!NSwagConfiguration.IsOpenApiSchemeGenerationRuntime)
+{
+	await AppDbInitializer.SeedAsync(app);
+}
 
 app.UseHttpsRedirection();
 
+app.UseNSwag();
+
 app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+	.AllowAnyOrigin()
+	.AllowAnyMethod()
+	.AllowAnyHeader());
 
 app.UseRouting();
 
@@ -137,8 +143,8 @@ app.UseExceptionSerializerMiddleware();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers();
-    endpoints.MapHub<CommentsHub>("hubs/comments");
+	endpoints.MapControllers();
+	endpoints.MapHub<CommentsHub>("hubs/comments");
 });
 
 app.Run();

@@ -1,0 +1,1676 @@
+{
+  "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v11.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "My Title",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_Login",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginQuery"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_Register",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterQuery"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/refresh": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_RefreshToken",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenQuery"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/create": {
+      "post": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_CreateCollection",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCollectionCommand"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Collections/{id}": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetCollection",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CollectionVm"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_RemoveCollection",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Collections/short/{id}": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetShortCollection",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ShortCollectionVm"
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/owner/{userId}": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetUserCollections",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ShortCollectionVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/largest": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetLargestCollections",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ShortCollectionVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/edit": {
+      "put": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_EditCollection",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditCollectionCommand"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Collections/cover": {
+      "post": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_UploadCover",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/{id}/fields": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetCollectionFields",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FieldWithTypeNameVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/{id}/tags": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetCollectionTags",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TagVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Collections/field-types": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "operationId": "Collections_GetFieldTypes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FieldTypeVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Comments/{itemId}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "Comments_GetComments",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CommentVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/create": {
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_CreateItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateItemCommand"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Items/short": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetShortItems",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "collectionId",
+            "in": "query",
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ShortItemVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/search": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_SearchItems",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Query",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "SearchBy",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SearchBy"
+            },
+            "x-nullable": false,
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ShortItemVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/last": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetLastAddedItems",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "Page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Size",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ShortItemVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/{id}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetItem",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemVm"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_RemoveItem",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Items/edit": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_EditItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditItemCommand"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Items/like/{id}": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_LikeItem",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Items/cover": {
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_UploadCover",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/search-tags/{query}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_SearchTags",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TagVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Items/top-tags": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetTopTags",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TagVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Topics": {
+      "get": {
+        "tags": [
+          "Topics"
+        ],
+        "operationId": "Topics_GetTopics",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Topic"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetCurrentUser",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserVm"
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetUserById",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserVm"
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/search/{query}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_SearchUsers",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetUsers",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "Page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Size",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserVm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/count": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetUsersCount",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/block/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_BlockUser",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Users/unblock/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_UnblockUser",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Users/remove/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_RemoveUser",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Users/add-admin/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_AddAdmin",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuthResponse": {
+      "type": "object",
+      "required": [
+        "accessToken",
+        "refreshToken"
+      ],
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginQuery": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 1
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RegisterQuery": {
+      "type": "object",
+      "required": [
+        "name",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 1
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RefreshTokenQuery": {
+      "type": "object",
+      "required": [
+        "accessToken",
+        "refreshToken"
+      ],
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refreshToken": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "CreateCollectionCommand": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "topicId",
+        "ownerId",
+        "fieldVMs"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "topicId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "ownerId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "fieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FieldVm"
+          }
+        },
+        "currentUserId": {
+          "type": "string"
+        }
+      }
+    },
+    "FieldVm": {
+      "type": "object",
+      "required": [
+        "name",
+        "fieldTypeId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "fieldTypeId": {
+          "type": "string",
+          "format": "guid"
+        }
+      }
+    },
+    "CollectionVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "description",
+        "topicId",
+        "ownerId",
+        "fieldVMs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "topicId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "ownerId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "fieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FieldVm"
+          }
+        }
+      }
+    },
+    "ShortCollectionVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "description",
+        "coverUrl",
+        "topicName",
+        "ownerId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "topicName": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string",
+          "format": "guid"
+        }
+      }
+    },
+    "EditCollectionCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "description",
+        "topicId",
+        "ownerId",
+        "fieldVMs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "topicId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "ownerId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "fieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FieldVm"
+          }
+        },
+        "currentUserId": {
+          "type": "string"
+        }
+      }
+    },
+    "FieldWithTypeNameVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "typeName"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      }
+    },
+    "TagVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "FieldTypeVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "CommentVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "creationDate",
+        "authorVm",
+        "itemId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "text": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authorVm": {
+          "$ref": "#/definitions/UserVm"
+        },
+        "itemId": {
+          "type": "string",
+          "format": "guid"
+        }
+      }
+    },
+    "UserVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "email",
+        "userRole",
+        "userState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "userRole": {
+          "type": "string"
+        },
+        "userState": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateItemCommand": {
+      "type": "object",
+      "required": [
+        "title",
+        "collectionId",
+        "tagNames",
+        "fullFieldVMs"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "collectionId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "tagNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fullFieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FullFieldVm"
+          }
+        },
+        "currentUserId": {
+          "type": "string"
+        }
+      }
+    },
+    "FullFieldVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "typeName"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "ShortItemVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "collectionId",
+        "tagNames",
+        "fullFieldVMs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "collectionId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "tagNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fullFieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FullFieldVm"
+          }
+        }
+      }
+    },
+    "SearchBy": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Title",
+        "Tag",
+        "Comment"
+      ],
+      "enum": [
+        0,
+        1,
+        2
+      ]
+    },
+    "ItemVm": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "creationDate",
+        "collectionId",
+        "usersItemVm",
+        "tagVMs",
+        "fullFieldVMs",
+        "ownerId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "collectionId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "usersItemVm": {
+          "$ref": "#/definitions/UsersItemVm"
+        },
+        "tagVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TagVm"
+          }
+        },
+        "fullFieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FullFieldVm"
+          }
+        },
+        "ownerId": {
+          "type": "string",
+          "format": "guid"
+        }
+      }
+    },
+    "UsersItemVm": {
+      "type": "object",
+      "required": [
+        "countOfLikes",
+        "isLiked"
+      ],
+      "properties": {
+        "countOfLikes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isLiked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "EditItemCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "collectionId",
+        "tagNames",
+        "fullFieldVMs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "coverUrl": {
+          "type": "string"
+        },
+        "collectionId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "tagNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fullFieldVMs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FullFieldVm"
+          }
+        },
+        "currentUserId": {
+          "type": "string"
+        }
+      }
+    },
+    "Topic": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
