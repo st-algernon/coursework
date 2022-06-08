@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { ShortCollection, CollectionRequest, FieldType, Collection, FieldWithTypeName, Tag } from "../interfaces";
+import { ShortCollection, FieldType, Collection, FieldWithTypeName, Tag } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class CollectionsService {

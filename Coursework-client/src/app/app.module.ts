@@ -18,6 +18,8 @@ import localeEn from '@angular/common/locales/en';
 import { NotAuthGuard } from './shared/guards/not-auth.guard';
 import { AdminGuard } from './shared/guards/admin.guard';
 import { UserActiveGuard } from './shared/guards/user-active.guard';
+import { API_BASE_URL } from './shared/services/api.service';
+import { environment } from 'src/environments/environment';
 
 registerLocaleData(localeRu);
 registerLocaleData(localeEn);
@@ -46,7 +48,9 @@ const INTERCEPTOR_PROVIDER: Provider = {
     AuthGuard,
     NotAuthGuard,
     AdminGuard,
-    UserActiveGuard
+    UserActiveGuard,
+    { provide: API_BASE_URL, useValue: environment.apiHost },
+
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable, ReplaySubject, tap } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
+import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../interfaces";
 

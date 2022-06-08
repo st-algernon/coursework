@@ -1,16 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { concatMap, forkJoin, Observable, Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CollectionFormComponent } from 'src/app/shared/components/collection-form/collection-form.component';
-import { DndComponent } from 'src/app/shared/components/dnd/dnd.component';
-import { Topic, FieldType, CollectionRequest, Field, User, ShortCollection, Collection } from 'src/app/shared/interfaces';
+import { Collection } from 'src/app/shared/interfaces';
 import { AuthStorage } from 'src/app/shared/services/auth.storage';
 import { CollectionsService } from 'src/app/shared/services/collections.service';
-import { TopicsService } from 'src/app/shared/services/topics.service';
 
 @Component({
   selector: 'app-create-collection-page',

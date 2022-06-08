@@ -1,13 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, switchMap, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AddItemDialogComponent } from 'src/app/shared/components/add-item-dialog/add-item-dialog.component';
 import { ItemsService } from 'src/app/shared/services/items.service';
-import { EditItemDialogComponent } from '../shared/components/edit-item-dialog/edit-item-dialog.component';
-import { Item, ShortCollection, ShortItem, Tag, User } from '../shared/interfaces';
+import { ShortCollection, ShortItem, Tag, User } from '../shared/interfaces';
 import { AuthStorage } from '../shared/services/auth.storage';
 import { CollectionsService } from '../shared/services/collections.service';
 import { UsersService } from '../shared/services/users.service';

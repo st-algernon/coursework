@@ -3,7 +3,8 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { FieldWithTypeName, FullField, Item, ShortItem, Tag } from '../../interfaces';
 import { CollectionsService } from '../../services/collections.service';
 import { ItemsService } from '../../services/items.service';

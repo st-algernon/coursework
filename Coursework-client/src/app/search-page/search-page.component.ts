@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { switchMap } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ShortItem } from '../shared/interfaces';
 import { AuthStorage } from '../shared/services/auth.storage';
 import { ItemsService } from '../shared/services/items.service';
