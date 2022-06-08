@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+$color-accent: #ffd740;
+$color-primary: #673ab7;
+$color-text: #38424c;
+$color-light-text: #979797;
+
+@mixin flexible($fd, $jc, $ai) {
+    display: flex;
+    flex-direction: $fd;
+    justify-content: $jc;
+    align-items: $ai;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-select-white .mat-select-value {
+    color: #fff;
+}

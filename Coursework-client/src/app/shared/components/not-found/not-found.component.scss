@@ -1,0 +1,23 @@
+@import '../../../../styles.scss';
+
+.not-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+
+    &__icon {
+        font-size: 124px;
+        height: 124px;
+        width: 124px;
+        padding-right: 10px;
+        color: $color-accent
+    }
+
+    &__text {
+        font-size: 48px;
+        padding-left: 10px;
+        color: $color-text;
+        line-height: 1.2em;
+    }
+}

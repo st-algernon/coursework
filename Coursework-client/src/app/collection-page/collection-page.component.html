@@ -1,0 +1,46 @@
+<main *ngIf="collection; else loading" class="collection-page">
+    <mat-card class="collection collection-page__collection">
+        <div class="collection__container">
+            <img 
+              *ngIf="collection.coverUrl; else default_cover"
+              class="collection__cover" 
+              [src]="collection.coverUrl"
+              alt="Cover"
+            >
+            <ng-template #default_cover>
+                <img class="collection__cover" src="../../assets/images//default-collection-cover.png" alt="default cover">
+            </ng-template>
+            <div class="collection__info">
+                <h2 class="collection__title">{{ collection.title }}</h2>
+                <p class="collection__description">{{ collection.description }}</p>
+                <span>{{'COLLECTION_PAGE.TOPIC' | translate}}: {{ collection.topicName }}</span>
+                <div *ngIf="collection.ownerId == currentUser?.id || currentUser?.userRole == 'Admin'" class="collection__actions">
+                    <button [routerLink]="['edit']" class="collection__actions-btn" mat-raised-button color="primary">{{'EDIT_BTN' | translate}}</button>
+                    <button class="collection__actions-btn" (click)="openAddItemDialog()" mat-raised-button color="accent" data-cy="add-collection-btn">{{'COLLECTION_PAGE.ADD_ITEM_BTN' | translate}}</button>
+                    <button class="collection__actions-btn" (click)="deleteCollection()" mat-raised-button color="warn">{{'DELETE_BTN' | translate}}</button>
+                </div>
+            </div>
+        </div>
+        <mat-card-footer class="collection__tags">
+            <mat-chip-list>
+                <mat-chip 
+                  *ngFor="let tag of collectionTags" 
+                  class="collection__tags-item"
+                  routerLink="/search" 
+                  [queryParams]="{'query': tag.name, 'searchBy': 1}"  
+                  color="primary"
+                >{{ tag.name }}</mat-chip>
+            </mat-chip-list>
+        </mat-card-footer>
+    </mat-card>
+
+    <section class="collection-page__items">
+        <app-items [items]="items"></app-items>
+    </section>
+</main>
+
+<ng-template #loading>
+    <div class="loading">
+        <mat-spinner diameter="34"></mat-spinner>
+    </div>
+</ng-template>

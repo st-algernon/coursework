@@ -1,0 +1,53 @@
+<main class="home-page">
+    <mat-card class="home-page__card">
+        <mat-card-header>
+            <mat-card-title>{{'HOME_PAGE.TITLE.LAST_ITEMS' | translate}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-items [items]="lastAddedItems.items" [pageSize]="lastAddedItems.pageSize"></app-items>
+        </mat-card-content>
+        <mat-card-footer align="center">
+            <button 
+              class="home-page__more-btn" 
+              (click)="loadMoreItems()" 
+              mat-raised-button 
+              color="accent"
+              data-cy="see-more-items-btn"
+            >{{'HOME_PAGE.SEE_MORE_BTN' | translate}}</button>
+        </mat-card-footer>
+    </mat-card>
+
+    <mat-card class="home-page__card">
+        <mat-card-header>
+            <mat-card-title>{{'HOME_PAGE.TITLE.LARGEST_COLLECTIONS' | translate}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-collections 
+                [collections]="largestCollections.items" 
+                [pageSize]="largestCollections.pageSize" 
+                data-cy="largest-collections-container"
+            ></app-collections>
+        </mat-card-content>
+        <mat-card-footer align="center">
+            <button 
+              class="home-page__more-btn" 
+              (click)="loadMoreCollections()" 
+              color="accent" 
+              mat-raised-button
+              data-cy="see-more-collections-btn"
+            >{{'HOME_PAGE.SEE_MORE_BTN' | translate}}</button>
+        </mat-card-footer>
+    </mat-card>
+
+    <mat-card class="home-page__card">
+        <mat-chip-list data-cy="top-tags-container">
+            <mat-chip 
+                *ngFor="let tag of topTags" 
+                routerLink="/search" 
+                [queryParams]="{'query': tag.name, 'searchBy': 1}" 
+                color="primary"
+                data-cy="top-tags-item"
+                >{{ tag.name }}</mat-chip>
+        </mat-chip-list>
+    </mat-card>
+</main>

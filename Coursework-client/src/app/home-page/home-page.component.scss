@@ -1,0 +1,25 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__card {
+        width: 55%;
+        min-width: 750px;
+        margin-top: 16px;
+        box-sizing: border-box;
+    }
+
+    &__more-btn {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+  .home-page {
+      &__card {
+          width: 100%;
+          min-width: 100%;
+      }
+  }
+}

@@ -1,0 +1,20 @@
+.search-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.search-results {
+    width: 55%;
+    min-width: 750px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .search-results {
+        width: 100%;
+        min-width: 100%;
+    }
+  }

@@ -1,0 +1,93 @@
+<main *ngIf="item; else loading" class="item-page">
+    <mat-card class="item item-page__item">
+        <img 
+          *ngIf="item.coverUrl; else default_cover"
+          class="item__cover" 
+          mat-card-xl-image 
+          [src]="item.coverUrl"
+        >
+        <ng-template #default_cover>
+            <img class="item__cover" src="../../../assets/images/default-item-cover.png" mat-card-xl-image alt="default cover">
+        </ng-template>
+        <div class="item__content">
+            <mat-card-header class="item__header">
+                <mat-card-title class="item__title">{{ item.title }}</mat-card-title>
+                <span class="item__creation-date">{{ item.creationDate | date:'mediumDate':'':dateLang }}</span>
+            </mat-card-header>
+            <mat-card-content>
+                <ul class="item-fields item__fields">
+                    <li *ngFor="let field of item.fullFieldVMs"
+                        class="item-fields__item"
+                    >
+                        <span class="item-fields__item-name">{{ field.name }}</span>
+                        <span class="item-fields__item-value">{{ field.value | displayField:field.typeName }}</span>
+                    </li>
+                </ul>
+            </mat-card-content>
+            <mat-card-footer class="item__tags">
+                <mat-chip-list>
+                    <mat-chip
+                      *ngFor="let tag of item.tagVMs"                 
+                      routerLink="/search" 
+                      [queryParams]="{'query': tag.name, 'searchBy': 1}"  
+                      color="primary"
+                    >{{ tag.name }}</mat-chip>
+                </mat-chip-list>
+            </mat-card-footer>
+            <mat-card-actions class="item-actions item__action-btns">
+                <div class="item-actions__like">
+                    <button 
+                      class="item-actions__like-btn" 
+                      [ngClass]="{'item-actions__like-btn--liked': item.usersItemVM.isLiked}" 
+                      (click)="toggleLikeBtn()" 
+                      mat-icon-button
+                    >
+                        <mat-icon>thumb_up</mat-icon>
+                    </button>
+                    <span class="item-actions__like-count" #likesCount>{{ item.usersItemVM.countOfLikes }}</span>    
+                </div>
+                <div *ngIf="item.ownerId == currentUser?.id || currentUser?.userRole == 'Admin'" class="item-actions__crud-actions">
+                    <button (click)="openEditItemDialog(item)" mat-raised-button color="primary">{{'EDIT_BTN' | translate}}</button>
+                    <button (click)="deleteItem()" mat-raised-button color="warn">{{'DELETE_BTN' | translate}}</button>
+                </div>
+            </mat-card-actions>
+        </div>
+    </mat-card>
+
+    <mat-card class="comment-form item-page__comment-form">
+        <mat-card-header>
+            <mat-card-title>{{'ITEM_PAGE.COMMENT_FORM.TITLE' | translate}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field class="comment-form__form-field" appearance="outline">
+                <textarea type="text" [formControl]="commentCtrl" matInput></textarea>
+            </mat-form-field>
+            <div align="end">
+                <button mat-raised-button (click)="submitComment()" color="primary">{{'ITEM_PAGE.COMMENT_FORM.POST_BTN' | translate}}</button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="comments.length" class="comments-list item-page__comments-list">
+        <mat-list>
+            <ng-container *ngFor="let comment of comments; let i = index">
+                <mat-divider *ngIf="i == 0"></mat-divider>
+                <mat-list-item class="comment comments-list__item">
+                    <mat-icon class="comment__user-avatar" mat-list-icon>account_circle</mat-icon>
+                    <div mat-line>
+                        <a class="comment__user-name" [routerLink]="['/', comment.authorVM.id]">{{ comment.authorVM.name }}</a> · 
+                        <span class="comment__creation-date">{{ comment.creationDate | date:'medium':'':dateLang }}</span>
+                    </div>
+                    <div class="comment__content" mat-line>{{ comment.text }}</div>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </ng-container>
+        </mat-list>
+    </mat-card>
+</main>
+
+<ng-template #loading>
+    <div class="loading">
+        <mat-spinner diameter="34"></mat-spinner>
+    </div>
+</ng-template>

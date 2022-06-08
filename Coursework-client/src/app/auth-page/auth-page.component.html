@@ -1,0 +1,110 @@
+<main class="auth-page">
+    <mat-card class="auth-page__card">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab [label]="'AUTH_PAGE.TAB_TITLE.LOGIN' | translate">
+          <form
+            class="auth-form auth-page__form"
+            [formGroup]="loginForm"
+            (ngSubmit)="login()"
+          >
+            <mat-form-field class="auth-form__form-field" appearance="standard">
+              <mat-label>{{'AUTH_PAGE.AUTH_FORM.LABEL.EMAIL' | translate}}</mat-label>
+              <input
+                type="email"
+                formControlName="email"
+                matInput
+                placeholder="example@mail.com"
+              />
+              <mat-error *ngIf="loginForm.get('email')?.errors?.email">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="loginForm.get('email')?.errors?.required">
+                Email is <strong>required</strong>
+              </mat-error>
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="auth-form__form-field" appearance="standard">
+              <mat-label>{{'AUTH_PAGE.AUTH_FORM.LABEL.PASSWORD' | translate}}</mat-label>
+              <input type="password" formControlName="password" matInput />
+              <mat-error *ngIf="loginForm.get('password')?.errors?.required">
+                Password is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="loginForm.get('password')?.errors?.minlength?.requiredLength">
+                Password must be at least {{ loginForm.get('password')?.errors?.minlength?.requiredLength }} characters long
+              </mat-error>
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+
+            <button 
+              class="auth-form__btn"
+              type="submit" 
+              [disabled]="loginForm.invalid || submitted" 
+              mat-raised-button 
+              color="primary"
+            > 
+              <span *ngIf="!submitted">{{'AUTH_PAGE.AUTH_FORM.LOGIN_BTN' | translate}}</span>
+              <mat-spinner *ngIf="submitted" class="auth-form__spinner" diameter="20"></mat-spinner>
+            </button>
+          </form>
+        </mat-tab>
+        <mat-tab [label]="'AUTH_PAGE.TAB_TITLE.REGISTER' | translate">
+          <form 
+            class="auth-form auth-page__form" 
+            [formGroup]="registerForm" 
+            (ngSubmit)="register()"
+          >
+              <mat-form-field class="auth-form__form-field" appearance="standard">
+                <mat-label>{{'AUTH_PAGE.AUTH_FORM.LABEL.NAME' | translate}}</mat-label>
+                <input type="text" formControlName="name" matInput />
+                <mat-error *ngIf="registerForm.get('name')?.errors?.required">
+                  Name is <strong>required</strong>
+                </mat-error>
+                <mat-icon matSuffix>perm_identity</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field class="auth-form__form-field" appearance="standard">
+                <mat-label>{{'AUTH_PAGE.AUTH_FORM.LABEL.EMAIL' | translate}}</mat-label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  matInput
+                  placeholder="example@mail.com"
+                />
+                <mat-error *ngIf="registerForm.get('email')?.errors?.email">
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('email')?.errors?.required">
+                  Email is <strong>required</strong>
+                </mat-error>
+                <mat-icon matSuffix>email</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field class="auth-form__form-field" appearance="standard">
+                <mat-label>{{'AUTH_PAGE.AUTH_FORM.LABEL.PASSWORD' | translate}}</mat-label>
+                <input type="password" formControlName="password" matInput />
+                <mat-error *ngIf="registerForm.get('password')?.errors?.required">
+                  Password is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('password')?.errors?.minlength?.requiredLength">
+                  Password must be at least {{ loginForm.get('password')?.errors?.minlength?.requiredLength }} characters long
+                </mat-error>
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+
+            <button 
+              class="auth-form__btn"
+              type="submit" 
+              [disabled]="registerForm.invalid || submitted" 
+              mat-raised-button
+              color="primary"
+            > 
+              <span *ngIf="!submitted">{{'AUTH_PAGE.AUTH_FORM.REGISTER_BTN' | translate}}</span>
+              <mat-spinner *ngIf="submitted" class="auth-form__spinner" diameter="20"></mat-spinner>
+            </button>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </main>
+  

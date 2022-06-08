@@ -1,0 +1,49 @@
+.user-collections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    &__user {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 55%;
+        min-width: 750px;
+        box-sizing: border-box;
+    }
+
+    &__user-name {
+        margin-bottom: 0px!important;
+    }
+
+    &__user-actions {
+        padding-top: 0px;
+    }
+
+    &__list {
+        width: 55%;
+        min-width: 750px;
+    }
+}
+
+.loading {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .user-collections {
+        
+        &__user, &__list {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+
+}

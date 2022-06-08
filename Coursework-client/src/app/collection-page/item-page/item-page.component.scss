@@ -1,0 +1,167 @@
+@import '../../../styles.scss';
+
+.item-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__item, &__comment-form, &__comments-list {
+        width: 55%;
+        min-width: 750px;
+        box-sizing: border-box;
+    }
+
+    &__comment-form {
+        margin-top: 15px;
+    }
+
+    &__comments-list {
+        margin-top: 10px;
+    }
+}
+
+.item {
+    display: flex;
+
+    &__cover {
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    &__content {
+        width: 100%;
+        margin-left: 24px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    &__title {
+        margin-left: -16px;
+    }
+
+    &__creation-date {
+        color: $color-light-text;
+    }
+
+    &__fields {
+        // margin: 0px 8px;
+    }
+
+    &__tags {
+        margin-left: 0px;
+    }
+
+    &__action-btns {
+        margin: 15px 0px 0px 0px;
+    }
+
+    .item-actions {
+        
+        &__like {
+            margin-bottom: 10px;
+        }
+
+        &__like-btn {
+            color: $color-light-text;
+
+            &--liked {
+                color: $color-accent;
+            }
+        }
+
+        &__like-count {
+            color: $color-text;
+        }
+
+        &__crud-actions {
+
+        }
+    }
+
+    .item-fields {
+        width: 100%;
+        padding: 0px;
+
+        &__item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px dotted $color-light-text;
+            background-color: #fff;
+        }
+
+        &__item-name {
+            position: relative;
+            top: 2px;
+            background-color: inherit;
+        }
+
+        &__item-value {
+            position: relative;
+            top: 2px;
+            background-color: inherit;
+        }
+    }
+}
+
+.comment-form {
+    &__form-field {
+        width: 100%;
+    }
+}
+
+.comment {
+    margin: 0px -16px;
+
+    &__user-avatar {
+        width: 36px!important;
+        height: 36px!important;
+        font-size: 36px!important;
+    }
+
+    &__user-name {
+        color: $color-text;
+        text-decoration: none;
+    }
+
+    &__creation-date {
+        color: $color-light-text;
+        font-size: 14px;
+    }
+}
+
+.loading {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 480px) {
+
+}
+
+@media (max-width: 600px) {
+    .item {
+        flex-direction: column;
+        align-items: center;
+
+        &__content {
+            margin-left: 0px;
+            margin-top: 25px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .item-page {
+        &__item, &__comment-form, &__comments-list {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+}

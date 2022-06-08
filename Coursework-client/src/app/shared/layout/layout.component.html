@@ -1,0 +1,92 @@
+<header class="header">
+  <mat-toolbar class="header__toolbar">
+    <a routerLink="/" class="header__logo">
+      <mat-icon class="header__logo-image">collections</mat-icon>
+      <span class="header__logo-text">My collections</span>
+    </a>
+
+    <form *ngIf="!isXSmallResolution" class="search-form header__search-form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="custom-search-field">
+        <input class="custom-search-field__input" matInput placeholder="{{'LAYOUT.SEARCH_FORM.INPUT_PLACEHOLDER' | translate}}" formControlName="search">
+        <mat-select class="custom-search-field__select" formControlName="searchBy">
+          <mat-option value="0">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.TITLE' | translate}}</mat-option>
+          <mat-option value="1">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.TAG' | translate}}</mat-option>
+          <mat-option value="2">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.COMMENT' | translate}}</mat-option>
+        </mat-select>
+      </div>
+      <button class="search-form__submit-btn" mat-stroked-button>{{'LAYOUT.SEARCH_FORM.SEARCH_BTN' | translate}}</button>
+    </form>
+
+    <div class="header__right-wrapper">
+      <button 
+        *ngIf="isXSmallResolution" 
+        (click)="isSearchBarHidden = isSearchBarHidden ? false : true" 
+        class="header__search-toggle" 
+        [ngClass]="{'header__search-toggle--active': !isSearchBarHidden}"
+        mat-icon-button
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <div *ngIf="!currentUser" class="header__login">
+        <button routerLink="/auth" mat-button>
+          <mat-icon>login</mat-icon>
+          {{'LAYOUT.LOGIN' | translate}}
+        </button>
+      </div>
+  
+      <div *ngIf="currentUser" class="account-menu header__account-menu">
+        <span
+          class="account-menu__toggle"
+          [matMenuTriggerFor]="menu"
+        >
+          {{ currentUser.name }}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </span>
+        <mat-menu class="account-menu__list" #menu="matMenu">
+          <button *ngIf="currentUser.userRole == 'Admin'" routerLink="/admin-panel" mat-menu-item>
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>{{'LAYOUT.ACCOUNT_MENU.ADMIN_PANEL' | translate}}</span>
+         </button>
+         <button [routerLink]="[currentUser.id, 'collections']" mat-menu-item data-cy="my-collections-btn">
+           <mat-icon>collections</mat-icon>
+           <span>{{'LAYOUT.ACCOUNT_MENU.MY_COLLECTIONS' | translate}}</span>
+          </button>
+          <button (click)="logout()" mat-menu-item data-cy="logout-btn">
+            <mat-icon>logout</mat-icon>
+            <span>{{'LAYOUT.ACCOUNT_MENU.LOGOUT' | translate}}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <mat-toolbar *ngIf="!isSearchBarHidden && isXSmallResolution" class="header__search-toolbar">
+    <form class="search-form header__search-form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="custom-search-field">
+        <input class="custom-search-field__input" matInput placeholder="{{'LAYOUT.SEARCH_FORM.INPUT_PLACEHOLDER' | translate}}" formControlName="search">
+        <mat-select class="custom-search-field__select" formControlName="searchBy">
+          <mat-option value="0">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.TITLE' | translate}}</mat-option>
+          <mat-option value="1">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.TAG' | translate}}</mat-option>
+          <mat-option value="2">{{'LAYOUT.SEARCH_FORM.SELECT_SEARCH_BY.COMMENT' | translate}}</mat-option>
+        </mat-select>
+      </div>
+      <button class="search-form__submit-btn" mat-stroked-button>{{'LAYOUT.SEARCH_FORM.SEARCH_BTN' | translate}}</button>
+    </form>
+  </mat-toolbar>
+</header>
+
+<div class="main-wrapper">
+  <router-outlet></router-outlet>
+</div>
+
+<footer class="footer">
+  <div class="footer__wrapper">
+    <div class="gag"></div>
+    <mat-icon class="footer__logo">collections</mat-icon>
+    <mat-select class="mat-select-white footer__lang-select" [formControl]="langCtrl">
+      <mat-option value="en">en</mat-option>
+      <mat-option value="ru">ru</mat-option>
+    </mat-select>
+  </div>
+</footer>

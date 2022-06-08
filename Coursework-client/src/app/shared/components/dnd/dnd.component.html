@@ -1,0 +1,38 @@
+<div class="dnd-zone" [ngClass]="{'fileover': fileOver}">
+  <input
+    #fileInput
+    class="dnd-zone__input"
+    type="file" 
+    [multiple]="multiple"
+    [accept]="accept"
+    (change)="onFileChange(fileInput.files)" 
+    [formControl]="formControl"
+  />
+  <mat-icon class="dnd-zone__icon">cloud_upload</mat-icon>
+
+  <h3 class="dnd-zone__text">{{'DND.HINT' | translate}}</h3>
+  <p>{{'DND.OR' | translate}}</p>
+  <button 
+    class="dnd-zone__button"
+    mat-raised-button 
+    color="accent" 
+    (click)="fileInput.click()"
+  >{{'DND.BROWSE_BTN' | translate}}</button>
+</div>
+
+<div class="file-list">
+  <div class="file-list__item" *ngFor="let image of previewImages; let i = index">
+    <img class="file-list__image" [src]="image.path" alt="preview image">
+    <div class="file-list__info">
+      <h4 class="file-list__info-name">
+        {{ image.name }}
+      </h4>
+      <p class="file-list__info-size">
+        {{ image.size | formatBytes }}
+      </p>
+    </div>
+    <button class="file-list__cancel" mat-icon-button (click)="deleteFile(i)">
+      <mat-icon class="file-list__cancel-icon">cancel</mat-icon>
+    </button>
+  </div>
+</div>

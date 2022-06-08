@@ -1,0 +1,19 @@
+.create-collection {
+    display: flex;
+    justify-content: center;
+    
+    &__card {
+        width: 55%;
+        min-width: 750px;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 768px) {
+    .create-collection {
+        &__card {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+}

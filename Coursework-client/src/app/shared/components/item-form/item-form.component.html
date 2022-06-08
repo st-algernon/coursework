@@ -1,0 +1,47 @@
+<form class="item-form" [formGroup]="itemForm">
+    <div class="item-form__cover-field">
+      <app-dnd (valueChanged)="onCoverChange($event)"></app-dnd>
+      <div *ngIf="seed?.coverUrl && !coverCtrl.value" class="default-cover item-form__default-cover">
+          <img class="default-cover__content" [src]="seed?.coverUrl" alt="">
+          <button class="default-cover__cancel-btn" (click)="deleteDefaultCover()" mat-icon-button>
+              <mat-icon class="default-cover__cancel-icon">cancel</mat-icon>
+          </button>
+      </div>
+    </div>
+
+    <mat-form-field class="item-form__form-field" appearance="standard">
+        <mat-label>{{'ITEM_FORM.LABEL.TITLE' | translate}}</mat-label>
+        <input type="text" formControlName="title" matInput />
+    </mat-form-field>
+
+    <mat-form-field class="example-chip-list" appearance="standard">
+        <mat-label>{{'ITEM_FORM.LABEL.TAGS' | translate}}</mat-label>
+        <mat-chip-list #chipList aria-label="Fruit selection">
+          <mat-chip
+            *ngFor="let tag of tagNames; let i = index"
+            (removed)="removeTagById(i)">
+            {{ tag }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            [placeholder]="'ITEM_FORM.PLACEHOLDER.TAG_INPUT' | translate"
+            #tagInput
+            formControlName="tag"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addTag($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectTag($event)">
+          <mat-option *ngFor="let tag of foundTags$| async" [value]="tag">
+            {{ tag.name }}
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <ng-container *ngFor="let field of fields; let i = index">
+        <app-type-field [label]="field.name" [fieldType]="field.typeName" [formControl]="fieldCtrls[i]" ngDefaultControl></app-type-field>
+    </ng-container>
+</form>

@@ -1,0 +1,110 @@
+{
+    "CREATE_BTN": "Create",
+    "ADD_BTN": "Add",
+    "EDIT_BTN": "Edit",
+    "DELETE_BTN": "Delete",
+    "LAYOUT": {
+        "SEARCH_FORM": {
+            "INPUT_PLACEHOLDER": "E.g. Dogs",
+            "SELECT_SEARCH_BY": {
+                "TITLE": "Title",
+                "TAG": "Tag",
+                "COMMENT": "Comment"
+            },
+            "SEARCH_BTN": "Search"
+        },
+        "LOGIN": "Login",
+        "ACCOUNT_MENU": {
+            "MY_COLLECTIONS": "My collections",
+            "ADMIN_PANEL": "Admin panel",
+            "LOGOUT": "Logout"
+        }
+    },
+    "COLLECTION_FORM": {
+        "LABEL": {
+            "TITLE": "Title",
+            "DESCRIPTION": "Description",
+            "TOPIC": "Topic",
+            "FIELD_NAME": "Field name",
+            "FIELD_TYPE": "Type"
+        },
+        "ADD_FIELD_BTN": "Add field",
+        "EXPANSION_PANEL": {
+            "TITLE": "Field",
+            "DESCRIPTION": "What characterizes each item of the collection" 
+        }
+    },
+    "ITEM_FORM": {
+        "LABEL": {
+            "TITLE": "Title",
+            "TAGS": "Tags"
+        },
+        "PLACEHOLDER": {
+            "TAG_INPUT": "New tag..."
+        }
+    },
+    "ADD_ITEM_DIALOG": {
+        "TITLE": "Add item"
+    },
+    "EDIT_ITEM_DIALOG": {
+        "TITLE": "Edit item"
+    },
+    "DND": {
+        "HINT": "Drag and drop file here",
+        "OR": "or",
+        "BROWSE_BTN": "Browse for files"
+    },
+    "SEARCH_PAGE": {
+        "TITLE": "Search results"
+    },
+    "HOME_PAGE": {
+        "TITLE": {
+            "LAST_ITEMS": "Last added items",
+            "LARGEST_COLLECTIONS": "The largest collections"
+        },
+        "SEE_MORE_BTN": "See more"
+    },
+    "COLLECTION_PAGE": {
+        "TOPIC": "Topic",
+        "ADD_ITEM_BTN": "Add item"
+    },
+    "ITEM_PAGE": {
+        "COMMENT_FORM": {
+            "TITLE": "Comment",
+            "POST_BTN": "Post"
+        }
+    }, 
+    "AUTH_PAGE": {
+        "TAB_TITLE": {
+            "LOGIN": "Login",
+            "REGISTER": "Register"
+        },
+        "AUTH_FORM": {
+            "LABEL": {
+                "EMAIL": "Email",
+                "PASSWORD": "Password",
+                "NAME": "Name"
+            },
+            "VALID_ERROR": {
+
+            },
+            "LOGIN_BTN": "Login",
+            "REGISTER_BTN": "Register"
+        }
+    },
+    "ADMIN_PANEL": {
+        "BLOCK_BTN": "Block",
+        "UNBLOCK_BTN": "Unblock",
+        "REMOVE_BTN": "Remove",
+        "APPOINT_BTN": "Appoint an admin",
+        "USERS_TABLE": {
+            "SEARCH_LABEL": "Search for users",
+            "COLUMN_HEADER": {
+                "NAME": "Name",
+                "EMAIL": "Email",
+                "ROLE": "Role",
+                "STATE": "State"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+<main *ngIf="user; else loading" class="user-collections">
+    <mat-card class="user-collections__user">
+        <mat-card-header>
+            <mat-card-title class="user-collections__user-name">{{ user.name }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions 
+          *ngIf="user.id == currentUser?.id || currentUser?.userRole == 'Admin'"
+          class="user-collections__user-actions"
+        >
+            <button 
+              [routerLink]="['create']" 
+              mat-raised-button 
+              color="accent"
+            >{{'CREATE_BTN' | translate}}</button>
+        </mat-card-actions>
+    </mat-card>
+    <section class="user-collections__list">
+        <app-collections [collections]="collections"></app-collections>
+    </section>
+</main>
+
+<ng-template #loading>
+    <div class="loading">
+        <mat-spinner diameter="34"></mat-spinner>
+    </div>
+</ng-template>

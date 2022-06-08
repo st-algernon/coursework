@@ -1,0 +1,90 @@
+<section class="users-actions">
+    <button 
+      class="users-actions__button" 
+      *ngIf="isButtonsDisabled.unblockBtn" 
+      [disabled]="isButtonsDisabled.blockBtn" 
+      mat-raised-button 
+      color="accent"
+      (click)="blockUser()"
+    >{{'ADMIN_PANEL.BLOCK_BTN' | translate}}</button>
+    <button 
+      class="users-actions__button" 
+      *ngIf="!isButtonsDisabled.unblockBtn" 
+      mat-raised-button 
+      color="accent"
+      (click)="unblockUser()"
+    >{{'ADMIN_PANEL.UNBLOCK_BTN' | translate}}</button>
+    <button 
+      class="users-actions__button" 
+      [disabled]="isButtonsDisabled.removeBtn" 
+      mat-raised-button 
+      color="warn"
+      (click)="removeUser()"
+    >{{'ADMIN_PANEL.REMOVE_BTN' | translate}}</button>
+    <button 
+      class="users-actions__button" 
+      [disabled]="isButtonsDisabled.adminBtn" 
+      mat-raised-button 
+      color="primary"
+      (click)="appointAdmin()"
+    >{{'ADMIN_PANEL.APPOINT_BTN' | translate}}</button>
+</section>
+
+<mat-divider></mat-divider>
+
+<mat-form-field class="users-search" appearance="standard">
+  <mat-label>{{'ADMIN_PANEL.USERS_TABLE.SEARCH_LABEL' | translate}}</mat-label>
+  <input matInput (keyup)="searchUser($event)" placeholder="Ex. Mia" #input>
+</mat-form-field>
+
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+<table class="users-table mat-elevation-z6" mat-table matSort [dataSource]="users">
+
+  <ng-container matColumnDef="checkbox">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef> {{'ADMIN_PANEL.USERS_TABLE.COLUMN_HEADER.NAME' | translate}} </th>
+    <td [routerLink]="['/', element.id]" mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef> {{'ADMIN_PANEL.USERS_TABLE.COLUMN_HEADER.EMAIL' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="userrole">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef> {{'ADMIN_PANEL.USERS_TABLE.COLUMN_HEADER.ROLE' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.userRole}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="userstate">
+    <th mat-header-cell mt-sort-header *matHeaderCellDef> {{'ADMIN_PANEL.USERS_TABLE.COLUMN_HEADER.STATE' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.userState}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+<mat-paginator 
+  [length]="allUsersCount" 
+  [pageIndex]="pageIndex" 
+  [pageSize]="pageSize" 
+  [pageSizeOptions]="pageSizeOptions" 
+  (page)="pageChanged($event)"
+  aria-label="Select page"
+></mat-paginator>

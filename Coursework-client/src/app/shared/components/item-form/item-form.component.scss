@@ -1,0 +1,46 @@
+@import '../../../../styles.scss';
+
+.item-form {
+    display: flex;
+    flex-direction: column;
+    
+    &__cover-field {
+        margin-bottom: 10px;
+    }
+
+    &__default-cover {
+        margin-top: 10px;
+    }
+
+    &__form-field {
+        width: 100%;
+    }
+
+    .default-cover {
+        border: 1px dashed $color-light-text;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 5px 5px 4px 5px;
+    
+        &__content {
+            object-fit: cover;
+            width: 100px;
+            height: 70px;
+        }
+    
+        &__cancel-btn {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            right: 25px;
+        }
+    
+        &__cancel-icon {
+            width: 100%;
+            height: 100%;
+            font-size: 32px;
+            color: $color-text;
+        }
+    }
+}

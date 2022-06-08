@@ -1,0 +1,78 @@
+@import '../../styles.scss';
+
+.collection-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__collection, &__items {
+        width: 55%;
+        min-width: 750px;
+    }
+
+    &__items {
+        margin-top: 15px;
+    }
+}
+
+.collection {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    &__container {
+        display: flex;
+    }
+
+    &__cover {
+        width: 150px;
+        height: 150px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    &__info {
+        padding-left: 20px;
+        color: $color-text;
+    }
+
+    &__title { }
+
+    &__description {
+        max-height: 50px;
+        overflow: hidden;
+    }
+
+    &__actions {
+        margin-top: 14px;
+    }
+
+    &__actions-btn {
+        margin: 0px 8px 6px 0px;
+    }
+
+    &__tags {
+        margin: 15px 10px 0px 10px;
+    }
+
+    &__tags-item {
+        cursor: pointer;
+    }
+}
+
+.loading {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .collection-page {
+        &__collection, &__items {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+}

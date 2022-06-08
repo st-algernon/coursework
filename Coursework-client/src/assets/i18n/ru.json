@@ -1,0 +1,110 @@
+{
+    "CREATE_BTN": "Создать",
+    "ADD_BTN": "Добавить",
+    "EDIT_BTN": "Редактировать",
+    "DELETE_BTN": "Удалить",
+    "LAYOUT": {
+        "SEARCH_FORM": {
+            "INPUT_PLACEHOLDER": "например, Dogs",
+            "SELECT_SEARCH_BY": {
+                "TITLE": "Название",
+                "TAG": "Тег",
+                "COMMENT": "Комментарий"
+            },
+            "SEARCH_BTN": "Поиск"
+        },
+        "LOGIN": "Вход",
+        "ACCOUNT_MENU": {
+            "MY_COLLECTIONS": "Мои коллекции",
+            "ADMIN_PANEL": "Панель администратора",
+            "LOGOUT": "Выход"
+        }
+    },
+    "COLLECTION_FORM": {
+        "LABEL": {
+            "TITLE": "Название",
+            "DESCRIPTION": "Описание",
+            "TOPIC": "Тема",
+            "FIELD_NAME": "Название поля",
+            "FIELD_TYPE": "Тип"
+        },
+        "ADD_FIELD_BTN": "Добавить поле",
+        "EXPANSION_PANEL": {
+            "TITLE": "Поле",
+            "DESCRIPTION": "Что характеризует каждый предмет коллекции" 
+        }
+    },
+    "ITEM_FORM": {
+        "LABEL": {
+            "TITLE": "Название",
+            "TAGS": "Теги"
+        },
+        "PLACEHOLDER": {
+            "TAG_INPUT": "Новый тег..."
+        }
+    },
+    "ADD_ITEM_DIALOG": {
+        "TITLE": "Добавить предмет"
+    },
+    "EDIT_ITEM_DIALOG": {
+        "TITLE": "Редактировать предмет"
+    },
+    "DND": {
+        "HINT": "Перетащите файл сюда",
+        "OR": "или",
+        "BROWSE_BTN": "Поиск файлов"
+    },
+    "SEARCH_PAGE": {
+        "TITLE": "Результаты поиска"
+    },
+    "HOME_PAGE": {
+        "TITLE": {
+            "LAST_ITEMS": "Недавно добавленные предметы",
+            "LARGEST_COLLECTIONS": "Самые большие коллекции"
+        },
+        "SEE_MORE_BTN": "Посмотреть еще"
+    },
+    "COLLECTION_PAGE": {
+        "TOPIC": "Тема",
+        "ADD_ITEM_BTN": "Добавить предмет"
+    },
+    "ITEM_PAGE": {
+        "COMMENT_FORM": {
+            "TITLE": "Комментарий",
+            "POST_BTN": "Опубликовать"
+        }
+    }, 
+    "AUTH_PAGE": {
+        "TAB_TITLE": {
+            "LOGIN": "Вход",
+            "REGISTER": "Зарегистрироваться"
+        },
+        "AUTH_FORM": {
+            "LABEL": {
+                "EMAIL": "E-mail",
+                "PASSWORD": "Пароль",
+                "NAME": "Имя"
+            },
+            "VALID_ERROR": {
+
+            },
+            "LOGIN_BTN": "Вход",
+            "REGISTER_BTN": "Зарегистрироваться"
+        }
+    },
+    "ADMIN_PANEL": {
+        "BLOCK_BTN": "Заблокировать",
+        "UNBLOCK_BTN": "Разблокировать",
+        "REMOVE_BTN": "Удалить",
+        "APPOINT_BTN": "Назначить админом",
+        "USERS_TABLE": {
+            "SEARCH_LABEL": "Поиск пользователей",
+            "COLUMN_HEADER": {
+                "NAME": "Имя",
+                "EMAIL": "E-mail",
+                "ROLE": "Роль",
+                "STATE": "Статус"
+            }
+        }
+    }
+}

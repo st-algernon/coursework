@@ -1,0 +1,79 @@
+<form class="collection-form" [formGroup]="collectionForm">
+    <div class="collection-form__cover-field">
+        <app-dnd (valueChanged)="onCoverChange($event)"></app-dnd>
+        <div *ngIf="seed?.coverUrl && !cover.value" class="default-cover collection-form__default-cover">
+            <img class="default-cover__content" [src]="seed?.coverUrl" alt="">
+            <button class="default-cover__cancel-btn" (click)="deleteDefaultCover()" mat-icon-button>
+                <mat-icon class="default-cover__cancel-icon">cancel</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <mat-form-field class="collection-form__form-field" appearance="standard">
+        <mat-label>{{'COLLECTION_FORM.LABEL.TITLE' | translate}}</mat-label>
+        <input type="text" formControlName="title" matInput />
+    </mat-form-field>
+
+    <mat-form-field class="collection-form__form-field" appearance="standard">
+        <mat-label>{{'COLLECTION_FORM.LABEL.DESCRIPTION' | translate}}</mat-label>
+        <textarea type="text" formControlName="description" matInput></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="collection-form__form-field" appearance="standard">
+        <mat-label>{{'COLLECTION_FORM.LABEL.TOPIC' | translate}}</mat-label>
+        <mat-select class="collection-form__select" formControlName="topicId">
+          <input class="collection-form__select-filter" (keyup)="topicsFilter($event)" placeholder="Filter..." matInput>
+          <mat-option *ngFor="let topic of selectedTopics" [value]="topic.id">
+            {{ topic.name }}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="collection-fields collection-form__fields">
+        <mat-accordion formArrayName="fields" multi>
+            <mat-expansion-panel 
+                *ngFor="let field of fieldsArray.controls; let i = index" 
+                [formGroupName]="i"
+            >
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ field.value.name ?? ('COLLECTION_FORM.EXPANSION_PANEL.TITLE' | translate) + ' ' + (i + 1) }}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{'COLLECTION_FORM.EXPANSION_PANEL.DESCRIPTION' | translate}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+        
+            <div class="collection-fields__container">
+                <mat-form-field class="collection-fields__form-field" appearance="standard">
+                    <mat-label>{{'COLLECTION_FORM.LABEL.FIELD_NAME' | translate}}</mat-label>
+                    <input formControlName="name" matInput>
+                </mat-form-field>
+
+                <mat-form-field class="collection-fields__form-field" appearance="standard">
+                    <mat-label>{{'COLLECTION_FORM.LABEL.FIELD_TYPE' | translate}}</mat-label>
+                    <mat-select formControlName="fieldTypeId">
+                        <mat-option *ngFor="let type of fieldTypes" [value]="type.id">
+                        {{ type.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <button mat-raised-button class="collection-fields__add-btn" (click)="addField()">
+            <mat-icon>add</mat-icon>
+            {{'COLLECTION_FORM.ADD_FIELD_BTN' | translate}}
+        </button>
+    </div>
+    <div align="end">
+        <button 
+          class="collection-form__submit-btn" 
+          mat-raised-button color="primary" 
+          (click)="onSubmit()"
+        >
+            <span *ngIf="!isLoading">{{ submitBtnName }}</span>
+            <mat-spinner *ngIf="isLoading" class="collection-form__spinner" color="accent" diameter="20"></mat-spinner>
+        </button>
+    </div>
+</form>
