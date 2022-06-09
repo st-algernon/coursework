@@ -74,8 +74,7 @@ export class AuthClient implements IAuthClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthResponse.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthResponse;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -126,8 +125,7 @@ export class AuthClient implements IAuthClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthResponse.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthResponse;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -178,8 +176,7 @@ export class AuthClient implements IAuthClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthResponse.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthResponse;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -199,7 +196,7 @@ export interface ICollectionsClient {
     getUserCollections(userId: string): Observable<ShortCollectionVm[]>;
     getLargestCollections(): Observable<ShortCollectionVm[]>;
     editCollection(request: EditCollectionCommand): Observable<void>;
-    uploadCover(): Observable<string>;
+    uploadCover(file?: FileParameter | null | undefined): Observable<string>;
     getCollectionFields(id: string): Observable<FieldWithTypeNameVm[]>;
     getCollectionTags(id: string): Observable<TagVm[]>;
     getFieldTypes(): Observable<FieldTypeVm[]>;
@@ -305,8 +302,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CollectionVm.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CollectionVm;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -403,8 +399,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ShortCollectionVm.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortCollectionVm;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -454,15 +449,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ShortCollectionVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortCollectionVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -509,15 +496,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ShortCollectionVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortCollectionVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -576,11 +555,16 @@ export class CollectionsClient implements ICollectionsClient {
         return _observableOf(null as any);
     }
 
-    uploadCover(): Observable<string> {
+    uploadCover(file?: FileParameter | null | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Collections/cover";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -612,9 +596,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -664,15 +646,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FieldWithTypeNameVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FieldWithTypeNameVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -722,15 +696,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TagVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TagVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -777,15 +743,7 @@ export class CollectionsClient implements ICollectionsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FieldTypeVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FieldTypeVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -853,15 +811,7 @@ export class CommentsClient implements ICommentsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CommentVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CommentVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -882,7 +832,7 @@ export interface IItemsClient {
     removeItem(id: string): Observable<void>;
     editItem(request: EditItemCommand): Observable<void>;
     likeItem(id: string): Observable<void>;
-    uploadCover(): Observable<string>;
+    uploadCover(file?: FileParameter | null | undefined): Observable<string>;
     searchTags(query: string | null): Observable<TagVm[]>;
     getTopTags(): Observable<TagVm[]>;
 }
@@ -988,15 +938,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ShortItemVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortItemVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1049,15 +991,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ShortItemVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortItemVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1112,15 +1046,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ShortItemVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ShortItemVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1170,8 +1096,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ItemVm.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ItemVm;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1324,11 +1249,16 @@ export class ItemsClient implements IItemsClient {
         return _observableOf(null as any);
     }
 
-    uploadCover(): Observable<string> {
+    uploadCover(file?: FileParameter | null | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Items/cover";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -1360,9 +1290,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1412,15 +1340,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TagVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TagVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1467,15 +1387,7 @@ export class ItemsClient implements IItemsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TagVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TagVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1540,15 +1452,7 @@ export class TopicsClient implements ITopicsClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(Topic.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Topic[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1621,8 +1525,7 @@ export class UsersClient implements IUsersClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserVm.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserVm;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1672,8 +1575,7 @@ export class UsersClient implements IUsersClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserVm.fromJS(resultData200);
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserVm;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1723,15 +1625,7 @@ export class UsersClient implements IUsersClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(UserVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1786,15 +1680,7 @@ export class UsersClient implements IUsersClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(UserVm.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserVm[];
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1841,9 +1727,7 @@ export class UsersClient implements IUsersClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2043,235 +1927,28 @@ export class UsersClient implements IUsersClient {
     }
 }
 
-export class AuthResponse implements IAuthResponse {
-    accessToken!: string;
-    refreshToken!: string;
-
-    constructor(data?: IAuthResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.accessToken = _data["accessToken"] !== undefined ? _data["accessToken"] : <any>null;
-            this.refreshToken = _data["refreshToken"] !== undefined ? _data["refreshToken"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): AuthResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accessToken"] = this.accessToken !== undefined ? this.accessToken : <any>null;
-        data["refreshToken"] = this.refreshToken !== undefined ? this.refreshToken : <any>null;
-        return data;
-    }
-}
-
-export interface IAuthResponse {
+export interface AuthResponse {
     accessToken: string;
     refreshToken: string;
 }
 
-export class LoginQuery implements ILoginQuery {
-    email!: string;
-    password!: string;
-
-    constructor(data?: ILoginQuery) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
-            this.password = _data["password"] !== undefined ? _data["password"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): LoginQuery {
-        data = typeof data === 'object' ? data : {};
-        let result = new LoginQuery();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email !== undefined ? this.email : <any>null;
-        data["password"] = this.password !== undefined ? this.password : <any>null;
-        return data;
-    }
-}
-
-export interface ILoginQuery {
+export interface LoginQuery {
     email: string;
     password: string;
 }
 
-export class RegisterQuery implements IRegisterQuery {
-    name!: string;
-    email!: string;
-    password!: string;
-
-    constructor(data?: IRegisterQuery) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
-            this.password = _data["password"] !== undefined ? _data["password"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): RegisterQuery {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegisterQuery();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["email"] = this.email !== undefined ? this.email : <any>null;
-        data["password"] = this.password !== undefined ? this.password : <any>null;
-        return data;
-    }
-}
-
-export interface IRegisterQuery {
+export interface RegisterQuery {
     name: string;
     email: string;
     password: string;
 }
 
-export class RefreshTokenQuery implements IRefreshTokenQuery {
-    accessToken!: string;
-    refreshToken!: string;
-
-    constructor(data?: IRefreshTokenQuery) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.accessToken = _data["accessToken"] !== undefined ? _data["accessToken"] : <any>null;
-            this.refreshToken = _data["refreshToken"] !== undefined ? _data["refreshToken"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): RefreshTokenQuery {
-        data = typeof data === 'object' ? data : {};
-        let result = new RefreshTokenQuery();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accessToken"] = this.accessToken !== undefined ? this.accessToken : <any>null;
-        data["refreshToken"] = this.refreshToken !== undefined ? this.refreshToken : <any>null;
-        return data;
-    }
-}
-
-export interface IRefreshTokenQuery {
+export interface RefreshTokenQuery {
     accessToken: string;
     refreshToken: string;
 }
 
-export class CreateCollectionCommand implements ICreateCollectionCommand {
-    title!: string;
-    description!: string;
-    coverUrl?: string | null;
-    topicId!: string;
-    ownerId!: string;
-    fieldVMs!: FieldVm[];
-    currentUserId?: string | null;
-
-    constructor(data?: ICreateCollectionCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.fieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.description = _data["description"] !== undefined ? _data["description"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.topicId = _data["topicId"] !== undefined ? _data["topicId"] : <any>null;
-            this.ownerId = _data["ownerId"] !== undefined ? _data["ownerId"] : <any>null;
-            if (Array.isArray(_data["fieldVMs"])) {
-                this.fieldVMs = [] as any;
-                for (let item of _data["fieldVMs"])
-                    this.fieldVMs!.push(FieldVm.fromJS(item));
-            }
-            else {
-                this.fieldVMs = <any>null;
-            }
-            this.currentUserId = _data["currentUserId"] !== undefined ? _data["currentUserId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): CreateCollectionCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateCollectionCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["description"] = this.description !== undefined ? this.description : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["topicId"] = this.topicId !== undefined ? this.topicId : <any>null;
-        data["ownerId"] = this.ownerId !== undefined ? this.ownerId : <any>null;
-        if (Array.isArray(this.fieldVMs)) {
-            data["fieldVMs"] = [];
-            for (let item of this.fieldVMs)
-                data["fieldVMs"].push(item.toJSON());
-        }
-        data["currentUserId"] = this.currentUserId !== undefined ? this.currentUserId : <any>null;
-        return data;
-    }
-}
-
-export interface ICreateCollectionCommand {
+export interface CreateCollectionCommand {
     title: string;
     description: string;
     coverUrl?: string | null;
@@ -2281,111 +1958,12 @@ export interface ICreateCollectionCommand {
     currentUserId?: string | null;
 }
 
-export class FieldVm implements IFieldVm {
-    name!: string;
-    fieldTypeId!: string;
-
-    constructor(data?: IFieldVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.fieldTypeId = _data["fieldTypeId"] !== undefined ? _data["fieldTypeId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): FieldVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new FieldVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["fieldTypeId"] = this.fieldTypeId !== undefined ? this.fieldTypeId : <any>null;
-        return data;
-    }
-}
-
-export interface IFieldVm {
+export interface FieldVm {
     name: string;
     fieldTypeId: string;
 }
 
-export class CollectionVm implements ICollectionVm {
-    id!: string;
-    title!: string;
-    description!: string;
-    coverUrl?: string | null;
-    topicId!: string;
-    ownerId!: string;
-    fieldVMs!: FieldVm[];
-
-    constructor(data?: ICollectionVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.fieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.description = _data["description"] !== undefined ? _data["description"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.topicId = _data["topicId"] !== undefined ? _data["topicId"] : <any>null;
-            this.ownerId = _data["ownerId"] !== undefined ? _data["ownerId"] : <any>null;
-            if (Array.isArray(_data["fieldVMs"])) {
-                this.fieldVMs = [] as any;
-                for (let item of _data["fieldVMs"])
-                    this.fieldVMs!.push(FieldVm.fromJS(item));
-            }
-            else {
-                this.fieldVMs = <any>null;
-            }
-        }
-    }
-
-    static fromJS(data: any): CollectionVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["description"] = this.description !== undefined ? this.description : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["topicId"] = this.topicId !== undefined ? this.topicId : <any>null;
-        data["ownerId"] = this.ownerId !== undefined ? this.ownerId : <any>null;
-        if (Array.isArray(this.fieldVMs)) {
-            data["fieldVMs"] = [];
-            for (let item of this.fieldVMs)
-                data["fieldVMs"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ICollectionVm {
+export interface CollectionVm {
     id: string;
     title: string;
     description: string;
@@ -2395,54 +1973,7 @@ export interface ICollectionVm {
     fieldVMs: FieldVm[];
 }
 
-export class ShortCollectionVm implements IShortCollectionVm {
-    id!: string;
-    title!: string;
-    description!: string;
-    coverUrl!: string;
-    topicName!: string;
-    ownerId!: string;
-
-    constructor(data?: IShortCollectionVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.description = _data["description"] !== undefined ? _data["description"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.topicName = _data["topicName"] !== undefined ? _data["topicName"] : <any>null;
-            this.ownerId = _data["ownerId"] !== undefined ? _data["ownerId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): ShortCollectionVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new ShortCollectionVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["description"] = this.description !== undefined ? this.description : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["topicName"] = this.topicName !== undefined ? this.topicName : <any>null;
-        data["ownerId"] = this.ownerId !== undefined ? this.ownerId : <any>null;
-        return data;
-    }
-}
-
-export interface IShortCollectionVm {
+export interface ShortCollectionVm {
     id: string;
     title: string;
     description: string;
@@ -2451,74 +1982,7 @@ export interface IShortCollectionVm {
     ownerId: string;
 }
 
-export class EditCollectionCommand implements IEditCollectionCommand {
-    id!: string;
-    title!: string;
-    description!: string;
-    coverUrl?: string | null;
-    topicId!: string;
-    ownerId!: string;
-    fieldVMs!: FieldVm[];
-    currentUserId?: string | null;
-
-    constructor(data?: IEditCollectionCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.fieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.description = _data["description"] !== undefined ? _data["description"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.topicId = _data["topicId"] !== undefined ? _data["topicId"] : <any>null;
-            this.ownerId = _data["ownerId"] !== undefined ? _data["ownerId"] : <any>null;
-            if (Array.isArray(_data["fieldVMs"])) {
-                this.fieldVMs = [] as any;
-                for (let item of _data["fieldVMs"])
-                    this.fieldVMs!.push(FieldVm.fromJS(item));
-            }
-            else {
-                this.fieldVMs = <any>null;
-            }
-            this.currentUserId = _data["currentUserId"] !== undefined ? _data["currentUserId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): EditCollectionCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new EditCollectionCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["description"] = this.description !== undefined ? this.description : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["topicId"] = this.topicId !== undefined ? this.topicId : <any>null;
-        data["ownerId"] = this.ownerId !== undefined ? this.ownerId : <any>null;
-        if (Array.isArray(this.fieldVMs)) {
-            data["fieldVMs"] = [];
-            for (let item of this.fieldVMs)
-                data["fieldVMs"].push(item.toJSON());
-        }
-        data["currentUserId"] = this.currentUserId !== undefined ? this.currentUserId : <any>null;
-        return data;
-    }
-}
-
-export interface IEditCollectionCommand {
+export interface EditCollectionCommand {
     id: string;
     title: string;
     description: string;
@@ -2529,178 +1993,23 @@ export interface IEditCollectionCommand {
     currentUserId?: string | null;
 }
 
-export class FieldWithTypeNameVm implements IFieldWithTypeNameVm {
-    id!: string;
-    name!: string;
-    typeName!: string;
-
-    constructor(data?: IFieldWithTypeNameVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.typeName = _data["typeName"] !== undefined ? _data["typeName"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): FieldWithTypeNameVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new FieldWithTypeNameVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["typeName"] = this.typeName !== undefined ? this.typeName : <any>null;
-        return data;
-    }
-}
-
-export interface IFieldWithTypeNameVm {
+export interface FieldWithTypeNameVm {
     id: string;
     name: string;
     typeName: string;
 }
 
-export class TagVm implements ITagVm {
-    id!: string;
-    name!: string;
-
-    constructor(data?: ITagVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): TagVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new TagVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data;
-    }
-}
-
-export interface ITagVm {
+export interface TagVm {
     id: string;
     name: string;
 }
 
-export class FieldTypeVm implements IFieldTypeVm {
-    id!: string;
-    name!: string;
-
-    constructor(data?: IFieldTypeVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): FieldTypeVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new FieldTypeVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data;
-    }
-}
-
-export interface IFieldTypeVm {
+export interface FieldTypeVm {
     id: string;
     name: string;
 }
 
-export class CommentVm implements ICommentVm {
-    id!: string;
-    text!: string;
-    creationDate!: Date;
-    authorVm!: UserVm;
-    itemId!: string;
-
-    constructor(data?: ICommentVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.authorVm = new UserVm();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.text = _data["text"] !== undefined ? _data["text"] : <any>null;
-            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
-            this.authorVm = _data["authorVm"] ? UserVm.fromJS(_data["authorVm"]) : new UserVm();
-            this.itemId = _data["itemId"] !== undefined ? _data["itemId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): CommentVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new CommentVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["text"] = this.text !== undefined ? this.text : <any>null;
-        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
-        data["authorVm"] = this.authorVm ? this.authorVm.toJSON() : <any>null;
-        data["itemId"] = this.itemId !== undefined ? this.itemId : <any>null;
-        return data;
-    }
-}
-
-export interface ICommentVm {
+export interface CommentVm {
     id: string;
     text: string;
     creationDate: Date;
@@ -2708,51 +2017,7 @@ export interface ICommentVm {
     itemId: string;
 }
 
-export class UserVm implements IUserVm {
-    id!: string;
-    name!: string;
-    email!: string;
-    userRole!: string;
-    userState!: string;
-
-    constructor(data?: IUserVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
-            this.userRole = _data["userRole"] !== undefined ? _data["userRole"] : <any>null;
-            this.userState = _data["userState"] !== undefined ? _data["userState"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["email"] = this.email !== undefined ? this.email : <any>null;
-        data["userRole"] = this.userRole !== undefined ? this.userRole : <any>null;
-        data["userState"] = this.userState !== undefined ? this.userState : <any>null;
-        return data;
-    }
-}
-
-export interface IUserVm {
+export interface UserVm {
     id: string;
     name: string;
     email: string;
@@ -2760,80 +2025,7 @@ export interface IUserVm {
     userState: string;
 }
 
-export class CreateItemCommand implements ICreateItemCommand {
-    title!: string;
-    coverUrl?: string | null;
-    collectionId!: string;
-    tagNames!: string[];
-    fullFieldVMs!: FullFieldVm[];
-    currentUserId?: string | null;
-
-    constructor(data?: ICreateItemCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.tagNames = [];
-            this.fullFieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.collectionId = _data["collectionId"] !== undefined ? _data["collectionId"] : <any>null;
-            if (Array.isArray(_data["tagNames"])) {
-                this.tagNames = [] as any;
-                for (let item of _data["tagNames"])
-                    this.tagNames!.push(item);
-            }
-            else {
-                this.tagNames = <any>null;
-            }
-            if (Array.isArray(_data["fullFieldVMs"])) {
-                this.fullFieldVMs = [] as any;
-                for (let item of _data["fullFieldVMs"])
-                    this.fullFieldVMs!.push(FullFieldVm.fromJS(item));
-            }
-            else {
-                this.fullFieldVMs = <any>null;
-            }
-            this.currentUserId = _data["currentUserId"] !== undefined ? _data["currentUserId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): CreateItemCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateItemCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["collectionId"] = this.collectionId !== undefined ? this.collectionId : <any>null;
-        if (Array.isArray(this.tagNames)) {
-            data["tagNames"] = [];
-            for (let item of this.tagNames)
-                data["tagNames"].push(item);
-        }
-        if (Array.isArray(this.fullFieldVMs)) {
-            data["fullFieldVMs"] = [];
-            for (let item of this.fullFieldVMs)
-                data["fullFieldVMs"].push(item.toJSON());
-        }
-        data["currentUserId"] = this.currentUserId !== undefined ? this.currentUserId : <any>null;
-        return data;
-    }
-}
-
-export interface ICreateItemCommand {
+export interface CreateItemCommand {
     title: string;
     coverUrl?: string | null;
     collectionId: string;
@@ -2842,128 +2034,14 @@ export interface ICreateItemCommand {
     currentUserId?: string | null;
 }
 
-export class FullFieldVm implements IFullFieldVm {
-    id!: string;
-    name!: string;
-    typeName!: string;
-    value?: string | null;
-
-    constructor(data?: IFullFieldVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.typeName = _data["typeName"] !== undefined ? _data["typeName"] : <any>null;
-            this.value = _data["value"] !== undefined ? _data["value"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): FullFieldVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new FullFieldVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["typeName"] = this.typeName !== undefined ? this.typeName : <any>null;
-        data["value"] = this.value !== undefined ? this.value : <any>null;
-        return data;
-    }
-}
-
-export interface IFullFieldVm {
+export interface FullFieldVm {
     id: string;
     name: string;
     typeName: string;
     value?: string | null;
 }
 
-export class ShortItemVm implements IShortItemVm {
-    id!: string;
-    title!: string;
-    coverUrl?: string | null;
-    collectionId!: string;
-    tagNames!: string[];
-    fullFieldVMs!: FullFieldVm[];
-
-    constructor(data?: IShortItemVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.tagNames = [];
-            this.fullFieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.collectionId = _data["collectionId"] !== undefined ? _data["collectionId"] : <any>null;
-            if (Array.isArray(_data["tagNames"])) {
-                this.tagNames = [] as any;
-                for (let item of _data["tagNames"])
-                    this.tagNames!.push(item);
-            }
-            else {
-                this.tagNames = <any>null;
-            }
-            if (Array.isArray(_data["fullFieldVMs"])) {
-                this.fullFieldVMs = [] as any;
-                for (let item of _data["fullFieldVMs"])
-                    this.fullFieldVMs!.push(FullFieldVm.fromJS(item));
-            }
-            else {
-                this.fullFieldVMs = <any>null;
-            }
-        }
-    }
-
-    static fromJS(data: any): ShortItemVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new ShortItemVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["collectionId"] = this.collectionId !== undefined ? this.collectionId : <any>null;
-        if (Array.isArray(this.tagNames)) {
-            data["tagNames"] = [];
-            for (let item of this.tagNames)
-                data["tagNames"].push(item);
-        }
-        if (Array.isArray(this.fullFieldVMs)) {
-            data["fullFieldVMs"] = [];
-            for (let item of this.fullFieldVMs)
-                data["fullFieldVMs"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IShortItemVm {
+export interface ShortItemVm {
     id: string;
     title: string;
     coverUrl?: string | null;
@@ -2978,90 +2056,7 @@ export enum SearchBy {
     Comment = 2,
 }
 
-export class ItemVm implements IItemVm {
-    id!: string;
-    title!: string;
-    coverUrl?: string | null;
-    creationDate!: Date;
-    collectionId!: string;
-    usersItemVm!: UsersItemVm;
-    tagVMs!: TagVm[];
-    fullFieldVMs!: FullFieldVm[];
-    ownerId!: string;
-
-    constructor(data?: IItemVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.usersItemVm = new UsersItemVm();
-            this.tagVMs = [];
-            this.fullFieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
-            this.collectionId = _data["collectionId"] !== undefined ? _data["collectionId"] : <any>null;
-            this.usersItemVm = _data["usersItemVm"] ? UsersItemVm.fromJS(_data["usersItemVm"]) : new UsersItemVm();
-            if (Array.isArray(_data["tagVMs"])) {
-                this.tagVMs = [] as any;
-                for (let item of _data["tagVMs"])
-                    this.tagVMs!.push(TagVm.fromJS(item));
-            }
-            else {
-                this.tagVMs = <any>null;
-            }
-            if (Array.isArray(_data["fullFieldVMs"])) {
-                this.fullFieldVMs = [] as any;
-                for (let item of _data["fullFieldVMs"])
-                    this.fullFieldVMs!.push(FullFieldVm.fromJS(item));
-            }
-            else {
-                this.fullFieldVMs = <any>null;
-            }
-            this.ownerId = _data["ownerId"] !== undefined ? _data["ownerId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): ItemVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new ItemVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
-        data["collectionId"] = this.collectionId !== undefined ? this.collectionId : <any>null;
-        data["usersItemVm"] = this.usersItemVm ? this.usersItemVm.toJSON() : <any>null;
-        if (Array.isArray(this.tagVMs)) {
-            data["tagVMs"] = [];
-            for (let item of this.tagVMs)
-                data["tagVMs"].push(item.toJSON());
-        }
-        if (Array.isArray(this.fullFieldVMs)) {
-            data["fullFieldVMs"] = [];
-            for (let item of this.fullFieldVMs)
-                data["fullFieldVMs"].push(item.toJSON());
-        }
-        data["ownerId"] = this.ownerId !== undefined ? this.ownerId : <any>null;
-        return data;
-    }
-}
-
-export interface IItemVm {
+export interface ItemVm {
     id: string;
     title: string;
     coverUrl?: string | null;
@@ -3073,123 +2068,12 @@ export interface IItemVm {
     ownerId: string;
 }
 
-export class UsersItemVm implements IUsersItemVm {
-    countOfLikes!: number;
-    isLiked!: boolean;
-
-    constructor(data?: IUsersItemVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.countOfLikes = _data["countOfLikes"] !== undefined ? _data["countOfLikes"] : <any>null;
-            this.isLiked = _data["isLiked"] !== undefined ? _data["isLiked"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UsersItemVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new UsersItemVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["countOfLikes"] = this.countOfLikes !== undefined ? this.countOfLikes : <any>null;
-        data["isLiked"] = this.isLiked !== undefined ? this.isLiked : <any>null;
-        return data;
-    }
-}
-
-export interface IUsersItemVm {
+export interface UsersItemVm {
     countOfLikes: number;
     isLiked: boolean;
 }
 
-export class EditItemCommand implements IEditItemCommand {
-    id!: string;
-    title!: string;
-    coverUrl?: string | null;
-    collectionId!: string;
-    tagNames!: string[];
-    fullFieldVMs!: FullFieldVm[];
-    currentUserId?: string | null;
-
-    constructor(data?: IEditItemCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.tagNames = [];
-            this.fullFieldVMs = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.coverUrl = _data["coverUrl"] !== undefined ? _data["coverUrl"] : <any>null;
-            this.collectionId = _data["collectionId"] !== undefined ? _data["collectionId"] : <any>null;
-            if (Array.isArray(_data["tagNames"])) {
-                this.tagNames = [] as any;
-                for (let item of _data["tagNames"])
-                    this.tagNames!.push(item);
-            }
-            else {
-                this.tagNames = <any>null;
-            }
-            if (Array.isArray(_data["fullFieldVMs"])) {
-                this.fullFieldVMs = [] as any;
-                for (let item of _data["fullFieldVMs"])
-                    this.fullFieldVMs!.push(FullFieldVm.fromJS(item));
-            }
-            else {
-                this.fullFieldVMs = <any>null;
-            }
-            this.currentUserId = _data["currentUserId"] !== undefined ? _data["currentUserId"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): EditItemCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new EditItemCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
-        data["coverUrl"] = this.coverUrl !== undefined ? this.coverUrl : <any>null;
-        data["collectionId"] = this.collectionId !== undefined ? this.collectionId : <any>null;
-        if (Array.isArray(this.tagNames)) {
-            data["tagNames"] = [];
-            for (let item of this.tagNames)
-                data["tagNames"].push(item);
-        }
-        if (Array.isArray(this.fullFieldVMs)) {
-            data["fullFieldVMs"] = [];
-            for (let item of this.fullFieldVMs)
-                data["fullFieldVMs"].push(item.toJSON());
-        }
-        data["currentUserId"] = this.currentUserId !== undefined ? this.currentUserId : <any>null;
-        return data;
-    }
-}
-
-export interface IEditItemCommand {
+export interface EditItemCommand {
     id: string;
     title: string;
     coverUrl?: string | null;
@@ -3199,44 +2083,14 @@ export interface IEditItemCommand {
     currentUserId?: string | null;
 }
 
-export class Topic implements ITopic {
-    id!: string;
-    name!: string;
-
-    constructor(data?: ITopic) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): Topic {
-        data = typeof data === 'object' ? data : {};
-        let result = new Topic();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data;
-    }
-}
-
-export interface ITopic {
+export interface Topic {
     id: string;
     name: string;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {

@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
-import { ShortItem } from '../shared/interfaces';
+import { ItemsClient, SearchBy, ShortItemVm } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
-import { ItemsService } from '../shared/services/items.service';
 
 @Component({
   selector: 'app-search-page',
@@ -13,11 +12,11 @@ import { ItemsService } from '../shared/services/items.service';
 })
 export class SearchPageComponent implements OnInit {
 
-  foundItems: ShortItem[] = [];
+  foundItems: ShortItemVm[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private itemsService: ItemsService,
+    private itemsClient: ItemsClient,
     private translate: TranslateService,
     private authStorage: AuthStorage
   ) { 
@@ -31,9 +30,9 @@ export class SearchPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.pipe(
-      switchMap((params: Params) => this.itemsService.searchItems({query: params['query'], searchBy: params['searchBy']}))
+      switchMap((params: Params) => this.itemsClient.searchItems(params['query'], params['searchBy']))
     ).subscribe(
-      (response: ShortItem[]) => { 
+      (response: ShortItemVm[]) => { 
         this.foundItems = response;
       }
     );

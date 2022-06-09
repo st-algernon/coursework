@@ -5,9 +5,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { FieldWithTypeName, FullField, Item, ShortItem, Tag } from '../../interfaces';
-import { CollectionsService } from '../../services/collections.service';
-import { ItemsService } from '../../services/items.service';
+import { FileParameter, CollectionsClient, ItemsClient, ItemVm, ShortItemVm, TagVm, FieldWithTypeNameVm, FullFieldVm } from '../../services/api.service';
 
 @Component({
   selector: 'app-item-form',
@@ -15,17 +13,17 @@ import { ItemsService } from '../../services/items.service';
   styleUrls: ['./item-form.component.scss']
 })
 export class ItemFormComponent implements OnInit {
-  @Input() seed?: Item;
+  @Input() seed?: ItemVm;
   @Input() parentCollectionId?: string;
-  @Output() submitted = new EventEmitter<ShortItem>();
+  @Output() submitted = new EventEmitter<ShortItemVm>();
   @Output() loading = new EventEmitter<boolean>();
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  foundTags$: Observable<Tag[]>;
+  foundTags$: Observable<TagVm[]>;
   tagNames: string[] = [];
 
   itemForm: FormGroup;
-  fields: FieldWithTypeName[] = [];
+  fields: FieldWithTypeNameVm[] = [];
   subs: Subscription[] = [];
 
   @ViewChild('tagInput') tagInput?: ElementRef<HTMLInputElement>;
@@ -51,8 +49,8 @@ export class ItemFormComponent implements OnInit {
   }
 
   constructor(
-    private itemsService: ItemsService,
-    private collectionsService: CollectionsService
+    private itemsClient: ItemsClient,
+    private collectionsClient: CollectionsClient
   ) {
     this.itemForm = new FormGroup({
       title: new FormControl(null, [Validators.required]),
@@ -64,9 +62,9 @@ export class ItemFormComponent implements OnInit {
     this.foundTags$ = this.tagCtrl.valueChanges.pipe(
       switchMap((value: string) => { 
         if (value == '')
-          return new Observable<Tag[]>();
+          return new Observable<TagVm[]>();
 
-        return itemsService.searchTags(value) 
+        return itemsClient.searchTags(value) 
       })
     );
   }
@@ -74,9 +72,9 @@ export class ItemFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.parentCollectionId) {
       this.subs.push(
-        this.collectionsService.getCollectionFields(this.parentCollectionId)
+        this.collectionsClient.getCollectionFields(this.parentCollectionId)
         .subscribe(
-          (response: FieldWithTypeName[]) => {
+          (response: FieldWithTypeNameVm[]) => {
             this.fields = response;
             response.forEach(
               f => this.fieldsArray.push(new FormControl())
@@ -110,7 +108,7 @@ export class ItemFormComponent implements OnInit {
   }
 
   selectTag(event: MatAutocompleteSelectedEvent) {
-    const tag = event.option.value as Tag;
+    const tag = event.option.value as TagVm;
 
     if (this.tagNames.includes(tag.name) == false) {
       this.tagNames.push(tag.name);
@@ -126,7 +124,7 @@ export class ItemFormComponent implements OnInit {
     this.tagNames.splice(index, 1);
   }
 
-  seedFieldsValue(seed: Item): void {
+  seedFieldsValue(seed: ItemVm): void {
     for (let i = 0; i < this.fields.length; i++) {
       if (this.fields[i].id == seed.fullFieldVMs[i].id) {
         this.fieldCtrls[i].setValue(seed.fullFieldVMs[i].value);
@@ -147,23 +145,23 @@ export class ItemFormComponent implements OnInit {
     this.loading.emit(true);
 
     const fullFields = this.getFullFields();
-    const request: ShortItem = {
-      id: this.seed?.id,
+    const request: ShortItemVm = {
+      id: this.seed?.id as string,
       title: this.titleCtrl.value,
       coverUrl: this.seed?.coverUrl,
       collectionId: this.parentCollectionId,
       tagNames: this.tagNames,
       fullFieldVMs: fullFields
     };
-    const file = this.coverCtrl.value as File;
 
     if (this.coverCtrl.value instanceof File) {
       const file = this.coverCtrl.value as File;
-      const formData = new FormData();
+      const fileParameter: FileParameter = {
+        data: file,
+        fileName: file.name
+      };
 
-      formData.set('file', file, file.name);
-
-      this.itemsService.uploadCover(formData).subscribe(
+      this.itemsClient.uploadCover(fileParameter).subscribe(
         (response: string) => {
           this.loading.emit(false)
           request.coverUrl = response;
@@ -180,8 +178,8 @@ export class ItemFormComponent implements OnInit {
     this.coverCtrl.setValue(files[0]);
   }
 
-  private getFullFields(): FullField[] {
-    const fullFields: FullField[] = [];
+  private getFullFields(): FullFieldVm[] {
+    const fullFields: FullFieldVm[] = [];
 
     for (let i = 0; i < this.fieldCtrls.length; i++) {
       fullFields.push({ 

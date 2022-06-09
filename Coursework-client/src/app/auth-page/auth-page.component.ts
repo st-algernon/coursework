@@ -5,8 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { LoginRequest, RegisterRequest } from '../shared/interfaces';
-import { AuthService } from '../shared/services/auth.service';
+import { AuthClient, LoginQuery, RegisterQuery } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
 
 @Component({
@@ -23,7 +22,7 @@ export class AuthPageComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(
-    private authService: AuthService,
+    private authClient: AuthClient,
     private router: Router,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
@@ -72,13 +71,13 @@ export class AuthPageComponent implements OnInit, OnDestroy {
 
     this.submitted = true;
 
-    const loginRequest: LoginRequest = {
+    const request: LoginQuery = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     }
 
     this.subs.push(
-      this.authService.login(loginRequest).subscribe(
+      this.authClient.login(request).subscribe(
         () => {
           this.router.navigate(['']);
           this.submitted = false;
@@ -98,14 +97,14 @@ export class AuthPageComponent implements OnInit, OnDestroy {
 
     this.submitted = true;
 
-    const registerRequest: RegisterRequest = {
+    const request: RegisterQuery = {
       name: this.registerForm.value.name,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password
     }
 
     this.subs.push(
-      this.authService.register(registerRequest).subscribe(
+      this.authClient.register(request).subscribe(
         () => {
           this.router.navigate(['']);
           this.submitted = false;

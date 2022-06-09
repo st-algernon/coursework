@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Comment, CommentRequest } from '../interfaces';
+import { CreateCommentCommand } from '../interfaces';
+import { CommentVm } from '../services/api.service';
 import { AuthStorage } from '../services/auth.storage';
 
 @Injectable({ providedIn: 'root' }) 
 export class CommentsHub {
     private hubConnection: signalR.HubConnection;
-    public comment$ = new Subject<Comment>();
+    public comment$ = new Subject<CommentVm>();
 
     constructor (
         private authStorage: AuthStorage
@@ -28,12 +29,12 @@ export class CommentsHub {
     }
 
     addReceivedCommentsListener() {
-        this.hubConnection.on("Receive", (comment: Comment) => {
+        this.hubConnection.on("Receive", (comment: CommentVm) => {
             this.comment$.next(comment);
         });
     }
 
-    sendComment(request: CommentRequest) {
+    sendComment(request: CreateCommentCommand) {
         this.hubConnection.invoke('Send', request);
     }
 }

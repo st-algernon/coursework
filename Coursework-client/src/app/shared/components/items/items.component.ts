@@ -1,8 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { Item, ShortItem } from 'src/app/shared/interfaces';
-import { ItemsService } from 'src/app/shared/services/items.service';
+import { ItemsClient, ShortItemVm } from '../../services/api.service';
 
 @Component({
   selector: 'app-items',
@@ -11,12 +10,12 @@ import { ItemsService } from 'src/app/shared/services/items.service';
 })
 export class ItemsComponent implements OnInit, OnChanges {
 
-  @Input() items: ShortItem[] = [];
+  @Input() items: ShortItemVm[] = [];
   @Input() pageSize?: number;
-  selectedItems?: ShortItem[];
+  selectedItems?: ShortItemVm[];
 
   constructor(
-    private itemsService: ItemsService
+    private itemsClient: ItemsClient
   ) { }
 
   ngOnChanges(): void {

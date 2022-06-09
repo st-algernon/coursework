@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CollectionFormComponent } from 'src/app/shared/components/collection-form/collection-form.component';
-import { Collection } from 'src/app/shared/interfaces';
+import { CollectionsClient, CollectionVm } from 'src/app/shared/services/api.service';
 import { AuthStorage } from 'src/app/shared/services/auth.storage';
-import { CollectionsService } from 'src/app/shared/services/collections.service';
 
 @Component({
   selector: 'app-edit-collection-page',
@@ -14,13 +13,13 @@ import { CollectionsService } from 'src/app/shared/services/collections.service'
   styleUrls: ['./edit-collection-page.component.scss']
 })
 export class EditCollectionPageComponent implements OnInit {
-  seed?: Collection;
+  seed?: CollectionVm;
   subs: Subscription[] = [];
 
   @ViewChild(CollectionFormComponent) collectionForm?: CollectionFormComponent;
 
   constructor(
-    private collectionsService: CollectionsService,
+    private collectionsClient: CollectionsClient,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
@@ -40,8 +39,8 @@ export class EditCollectionPageComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
 
     this.subs.push(
-      this.collectionsService.getCollection(id).subscribe(
-        (response: Collection) => this.seed = response
+      this.collectionsClient.getCollection(id).subscribe(
+        (response: CollectionVm) => this.seed = response
       )
     );
   }
@@ -52,9 +51,9 @@ export class EditCollectionPageComponent implements OnInit {
     );
   }
 
-  onSubmit(collection: Collection) {
+  onSubmit(collection: CollectionVm) {
     this.subs.push(
-      this.collectionsService.editCollection(collection).subscribe(
+      this.collectionsClient.editCollection(collection).subscribe(
         () => {
           this.snackBar.open('The collection was edited successfully', '', { duration: 3000 });
           this.collectionForm?.reset();

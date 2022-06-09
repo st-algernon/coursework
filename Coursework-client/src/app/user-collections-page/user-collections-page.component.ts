@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { ShortCollection, User } from 'src/app/shared/interfaces';
-import { CollectionsService } from 'src/app/shared/services/collections.service';
+import { CollectionsClient, ShortCollectionVm, UsersClient, UserVm } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
-import { UsersService } from '../shared/services/users.service';
 
 @Component({
   selector: 'app-user-collections-page',
@@ -14,14 +12,14 @@ import { UsersService } from '../shared/services/users.service';
 })
 export class UserCollectionsPageComponent implements OnInit {
 
-  user?: User;
-  currentUser?: User;
-  collections: ShortCollection[] = [];
+  user?: UserVm;
+  currentUser?: UserVm;
+  collections: ShortCollectionVm[] = [];
   subs: Subscription[] = [];
 
   constructor(
-    private collectionsService: CollectionsService,
-    private usersService: UsersService,
+    private collectionsClient: CollectionsClient,
+    private usersClient: UsersClient,
     private route: ActivatedRoute,
     private translate: TranslateService,
     private authStorage: AuthStorage
@@ -38,14 +36,14 @@ export class UserCollectionsPageComponent implements OnInit {
     const userId = this.route.snapshot.params['userId'];
 
     this.subs.push(
-      this.collectionsService.getUserCollections(userId).subscribe(
-        (response: ShortCollection[]) => this.collections = response
+      this.collectionsClient.getUserCollections(userId).subscribe(
+        (response: ShortCollectionVm[]) => this.collections = response
       ),
-      this.usersService.currentUser$.subscribe(
-        (response: User) => this.currentUser = response
+      this.authStorage.currentUser$.subscribe(
+        (response: UserVm) => this.currentUser = response
       ),
-      this.usersService.getUser(userId).subscribe(
-        (response: User) => this.user = response
+      this.usersClient.getUserById(userId).subscribe(
+        (response: UserVm) => this.user = response
       )
     );
   }

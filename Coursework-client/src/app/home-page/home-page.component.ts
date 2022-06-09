@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { SearchBy } from '../shared/enums';
-import { Item, ShortCollection, ShortItem, Tag } from '../shared/interfaces';
+import { CollectionsClient, ItemsClient, ShortCollectionVm, ShortItemVm, TagVm } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
-import { CollectionsService } from '../shared/services/collections.service';
-import { ItemsService } from '../shared/services/items.service';
 
 @Component({
   selector: 'app-home-page',
@@ -14,19 +11,19 @@ import { ItemsService } from '../shared/services/items.service';
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   lastAddedItems: {
-    items: ShortItem[]
+    items: ShortItemVm[]
     pageSize: number
   };
   largestCollections: {
-    items: ShortCollection[]
+    items: ShortCollectionVm[]
     pageSize: number
   };
-  topTags: Tag[] = [];
+  topTags: TagVm[] = [];
   subs: Subscription[] = [];
 
   constructor(
-    private collectionsService: CollectionsService,
-    private itemsService: ItemsService,
+    private collectionsClient: CollectionsClient,
+    private itemsClient: ItemsClient,
     private translate: TranslateService,
     private authStorage: AuthStorage
   ) { 
@@ -50,14 +47,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(
-      this.collectionsService.getLargestCollections().subscribe(
-        (response: ShortCollection[]) => this.largestCollections.items = response
+      this.collectionsClient.getLargestCollections().subscribe(
+        (response: ShortCollectionVm[]) => this.largestCollections.items = response
       ),
-      this.itemsService.getLastItems().subscribe(
-        (response: ShortItem[]) => this.lastAddedItems.items = response
+      this.itemsClient.getLastAddedItems().subscribe(
+        (response: ShortItemVm[]) => this.lastAddedItems.items = response
       ),
-      this.itemsService.getTopTags().subscribe(
-        (response: Tag[]) => this.topTags = response
+      this.itemsClient.getTopTags().subscribe(
+        (response: TagVm[]) => this.topTags = response
       )
     );
   }

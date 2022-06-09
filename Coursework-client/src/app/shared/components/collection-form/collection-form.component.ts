@@ -4,9 +4,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Collection, Field, FieldType, Topic } from '../../interfaces';
-import { CollectionsService } from '../../services/collections.service';
-import { TopicsService } from '../../services/topics.service';
+import { FileParameter, CollectionsClient, CollectionVm, FieldTypeVm, FieldVm, Topic, TopicsClient } from '../../services/api.service';
 import { DndComponent } from '../dnd/dnd.component';
 
 @Component({
@@ -16,15 +14,15 @@ import { DndComponent } from '../dnd/dnd.component';
 })
 export class CollectionFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() submitBtnName: string = 'Create';
-  @Input() seed?: Collection;
-  @Output() submitted = new EventEmitter<Collection>();
+  @Input() seed?: CollectionVm;
+  @Output() submitted = new EventEmitter<CollectionVm>();
 
   isLoading: boolean = false;
   ownerId: string;
   collectionForm: FormGroup;
   topics: Topic[] = [];
   selectedTopics: Topic[] = [];
-  fieldTypes: FieldType[] = [];
+  fieldTypes: FieldTypeVm[] = [];
   subs: Subscription[] = [];
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
@@ -51,8 +49,8 @@ export class CollectionFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   constructor(
-    private topicsService: TopicsService,
-    private collectionsService: CollectionsService,
+    private topicsClient: TopicsClient,
+    private collectionsClient: CollectionsClient,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
@@ -70,16 +68,16 @@ export class CollectionFormComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.subs.push(
-      this.topicsService.getTopics()
+      this.topicsClient.getTopics()
       .subscribe(
         (response: Topic[]) => { 
           this.topics = response;
           this.selectedTopics = this.topics;
         }
       ),
-      this.collectionsService.getFieldTypes()
+      this.collectionsClient.getFieldTypes()
       .subscribe(
-        (response: FieldType[]) => this.fieldTypes = response
+        (response: FieldTypeVm[]) => this.fieldTypes = response
       )
     );
   }
@@ -97,12 +95,12 @@ export class CollectionFormComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  addField(defaultValue?: Field) {
+  addField(defaultValue?: FieldVm) {
     this.fieldsArray.push(this.createField(defaultValue));
     this.accordion?.closeAll();
   }
 
-  createField(defaultValue?: Field): FormGroup {
+  createField(defaultValue?: FieldVm): FormGroup {
     return this.formBuilder.group({
       name: new FormControl({ value: defaultValue?.name, disabled: !!defaultValue }, [Validators.required]),
       fieldTypeId: new FormControl({ value: defaultValue?.fieldTypeId, disabled: !!defaultValue }, [Validators.required])
@@ -142,23 +140,24 @@ export class CollectionFormComponent implements OnInit, OnDestroy, OnChanges {
 
     this.isLoading = true;
 
-    const collection: Collection = {
-      id: this.seed?.id,
+    const collection: CollectionVm = {
+      id: this.seed?.id ?? '',
       title: this.title.value,
       description: this.description.value,
       coverUrl: this.seed?.coverUrl,
       topicId: this.topicId.value,
       ownerId: this.ownerId ?? this.seed?.ownerId,
-      fieldVMs: this.fieldsArray.value as Field[]
+      fieldVMs: this.fieldsArray.value as FieldVm[]
     };
 
     if (this.cover.value instanceof File) {
       const file = this.cover.value as File;
-      const formData = new FormData();
+      const fileParameter: FileParameter = {
+        data: file,
+        fileName: file.name
+      };
 
-      formData.set('file', file, file.name);
-
-      this.collectionsService.uploadCover(formData).subscribe(
+      this.collectionsClient.uploadCover(fileParameter).subscribe(
         (response: string) => {
           this.isLoading = false;
           collection.coverUrl = response;

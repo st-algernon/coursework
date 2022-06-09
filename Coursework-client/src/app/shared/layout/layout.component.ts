@@ -4,13 +4,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { SearchBy } from '../enums';
-import { SearchRequest, User } from '../interfaces';
-import { AuthService } from '../services/auth.service';
 import { AuthStorage } from '../services/auth.storage';
-import { ItemsService } from '../services/items.service';
-import { UsersService } from '../services/users.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ItemsClient, SearchBy, UsersClient, UserVm } from '../services/api.service';
+import { SearchItemsQuery } from '../interfaces';
 
 @Component({
   selector: 'app-layout',
@@ -21,7 +18,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   isXSmallResolution?: boolean;
   isSearchBarHidden?: boolean = true;
   searchForm: FormGroup;
-  currentUser?: User;
+  currentUser?: UserVm;
   langCtrl = new FormControl(localStorage.lang);
   subs: Subscription[] = [];
 
@@ -34,9 +31,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private usersService: UsersService,
-    private itemsService: ItemsService,
-    private authService: AuthService,
+    private itemsClient: ItemsClient,
     private router: Router,
     private route: ActivatedRoute,
     private authStorage: AuthStorage,
@@ -66,7 +61,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(
-      this.usersService.currentUser$.subscribe((response: User) => this.currentUser = response)
+      this.authStorage.currentUser$.subscribe((response: UserVm) => this.currentUser = response)
     );
     
     this.route.queryParams.subscribe(
@@ -92,7 +87,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.authStorage.logout();
     this.router.navigate(['/auth']);
   }
 
@@ -100,7 +95,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     if (this.searchForm.invalid)
       return;
 
-    const request: SearchRequest = {
+    const request: SearchItemsQuery = {
       query: this.searchCtrl.value,
       searchBy: this.searchByCtrl.value
     };

@@ -3,20 +3,20 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { AuthService } from "./services/auth.service";
+import { AuthClient, RefreshTokenQuery } from "./services/api.service";
 import { AuthStorage } from "./services/auth.storage";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor{
 
     constructor(
-        private auth: AuthService,
         private authStorage: AuthStorage,
+        private authClient: AuthClient,
         private router: Router
     ) {}
     
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (this.auth.isAuthenticated()) {
+        if (this.authStorage.isAuthenticated()) {
             req = this._addTokenToHeader(req);
         }
 
@@ -25,10 +25,15 @@ export class AuthInterceptor implements HttpInterceptor{
                 console.log('Interceptor Error: ', error)
 
                 if (error.status === 401 && !req.url.includes('auth')) {
-                    return this.auth.refreshToken().pipe(
+                    const request: RefreshTokenQuery = {
+                        accessToken: this.authStorage.accessToken as string,
+                        refreshToken: this.authStorage.refreshToken as string
+                    };
+
+                    return this.authClient.refreshToken(request).pipe(
                         switchMap(() => next.handle(this._addTokenToHeader(req))),
                         catchError((err) => {
-                            this.auth.logout();
+                            this.authStorage.logout();
 
                             return throwError(err);
                         })

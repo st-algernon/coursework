@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ShortCollection } from '../../interfaces';
+import { ShortCollectionVm } from '../../services/api.service';
 
 @Component({
   selector: 'app-collections',
@@ -8,9 +8,9 @@ import { ShortCollection } from '../../interfaces';
 })
 export class CollectionsComponent implements OnInit {
 
-  @Input() collections: ShortCollection[] = [];
+  @Input() collections: ShortCollectionVm[] = [];
   @Input() pageSize?: number;
-  selectedCollections?: ShortCollection[];
+  selectedCollections?: ShortCollectionVm[];
 
   constructor() { }
 
