@@ -1,8 +1,8 @@
 using Coursework_server.Configs;
 using Coursework_server.Data;
 using Coursework_server.Data.Hubs;
-using Coursework_server.Data.Services;
 using Coursework_server.Extensions.Middleware;
+using Coursework_server.Logs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
@@ -80,14 +80,7 @@ builder.Services.AddSingleton(tokenValidationParameters);
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTransient<UserService>();
-builder.Services.AddTransient<CollectionService>();
-builder.Services.AddTransient<TopicService>();
-builder.Services.AddTransient<TagService>();
-builder.Services.AddTransient<ItemService>();
-builder.Services.AddTransient<CommentService>();
-builder.Services.AddTransient<StorageService>();
-builder.Services.AddTransient<JwtService>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>

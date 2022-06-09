@@ -329,10 +329,21 @@
           "Collections"
         ],
         "operationId": "Collections_UploadCover",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "produces": [
           "text/plain",
           "application/json",
           "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
         ],
         "responses": {
           "200": {
@@ -737,10 +748,21 @@
           "Items"
         ],
         "operationId": "Items_UploadCover",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "produces": [
           "text/plain",
           "application/json",
           "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
         ],
         "responses": {
           "200": {

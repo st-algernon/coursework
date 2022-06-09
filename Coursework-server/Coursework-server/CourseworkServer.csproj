@@ -27,6 +27,6 @@
   </ItemGroup>
     
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Development' Or '$(Configuration)' == 'Debug'">
-    <Exec Command="(set ASPNETCORE_ENVIRONMENT=Development) &amp; nswag run /runtime:Net60" ContinueOnError="WarnAndContinue"/>
+    <Exec Command="(set ASPNETCORE_ENVIRONMENT=Development) &amp; nswag run /runtime:Net60" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>

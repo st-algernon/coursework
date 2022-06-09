@@ -1,5 +1,4 @@
 ﻿using Coursework_server.Data.Models;
-using Coursework_server.Data.Services;
 using Coursework_server.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

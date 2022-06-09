@@ -60,13 +60,8 @@ namespace Coursework_server.Controllers
 
 		[HttpPost("cover")]
 		[Authorize]
-		public async Task<string?> UploadCover()
-		{
-			var formCollection = await Request.ReadFormAsync();
-			var file = formCollection.Files.First();
-
-			return await _mediator.Send(new UploadFileCommand(file), HttpContext.RequestAborted);
-		}
+		public Task<string> UploadCover(IFormFile file) =>
+			_mediator.Send(new UploadFileCommand(file), HttpContext.RequestAborted);
 
         [HttpGet("{id}/fields")]
         public Task<List<FieldWithTypeNameVm>> GetCollectionFields(Guid id) =>

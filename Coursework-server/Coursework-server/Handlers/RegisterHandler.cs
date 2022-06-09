@@ -1,7 +1,6 @@
 using Coursework_server.Data;
 using Coursework_server.Data.DTOs.Responses;
 using Coursework_server.Data.Models;
-using Coursework_server.Data.Services;
 using Coursework_server.Handlers.Base;
 using Coursework_server.Helpers;
 using Coursework_server.Queries;
