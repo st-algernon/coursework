@@ -2,10 +2,9 @@ import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@an
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Item, ShortItem } from '../../interfaces';
-import { ItemsService } from '../../services/items.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ItemFormComponent } from '../item-form/item-form.component';
+import { ItemsClient, ItemVm, ShortItemVm } from '../../services/api.service';
 
 @Component({
   selector: 'app-edit-item-dialog',
@@ -13,14 +12,14 @@ import { ItemFormComponent } from '../item-form/item-form.component';
   styleUrls: ['./edit-item-dialog.component.scss']
 })
 export class EditItemDialogComponent implements OnInit, OnDestroy {
-  seed?: ShortItem;
+  seed?: ShortItemVm;
   subs: Subscription[] = [];
   isLoading: boolean = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: Item,
+    @Inject(MAT_DIALOG_DATA) public data: ItemVm,
     private dialogRef: MatDialogRef<EditItemDialogComponent>,
-    private itemsService: ItemsService,
+    private itemsClient: ItemsClient,
     private snackBar: MatSnackBar,
     private router: Router
   ) { }
@@ -35,11 +34,11 @@ export class EditItemDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSubmit(item: ShortItem) {
+  onSubmit(item: ShortItemVm) {
     this.isLoading = true;
 
     this.subs.push(
-      this.itemsService.editItem(item).subscribe(
+      this.itemsClient.editItem(item).subscribe(
         () => {
           this.isLoading = false;
           this.snackBar.open('The item was edited successfully', '', { duration: 3000 });

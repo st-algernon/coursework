@@ -17,9 +17,9 @@ import { CheckboxFieldComponent } from './checkbox-field.components';
 })
 export class TypeFieldComponent extends BasicFieldType {
 
-  @Input() fieldType: FieldTypes = 'String';
+  @Input() fieldType: string = 'String';
 
-  resolve(type: FieldTypes): Type<BasicFieldType> {
+  resolve(type: string): Type<BasicFieldType> {
     switch (type) {
       case 'String':
         return StringFieldComponent;

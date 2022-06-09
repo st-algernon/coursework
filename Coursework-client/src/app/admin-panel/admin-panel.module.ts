@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { UsersPageComponent } from './users-page/users-page.component';
 import { SharedModule } from '../shared/shared.module';
-import { UsersService } from '../shared/services/users.service';
 
 @NgModule({
   declarations: [
@@ -15,8 +13,6 @@ import { UsersService } from '../shared/services/users.service';
     SharedModule,
     AdminPanelRoutingModule
   ],
-  providers: [
-    UsersService
-  ]
+  providers: [ ]
 })
 export class AdminPanelModule { }

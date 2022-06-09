@@ -38,13 +38,13 @@
                 <div class="item-actions__like">
                     <button 
                       class="item-actions__like-btn" 
-                      [ngClass]="{'item-actions__like-btn--liked': item.usersItemVM.isLiked}" 
+                      [ngClass]="{'item-actions__like-btn--liked': item.usersItemVm.isLiked}" 
                       (click)="toggleLikeBtn()" 
                       mat-icon-button
                     >
                         <mat-icon>thumb_up</mat-icon>
                     </button>
-                    <span class="item-actions__like-count" #likesCount>{{ item.usersItemVM.countOfLikes }}</span>    
+                    <span class="item-actions__like-count" #likesCount>{{ item.usersItemVm.countOfLikes }}</span>    
                 </div>
                 <div *ngIf="item.ownerId == currentUser?.id || currentUser?.userRole == 'Admin'" class="item-actions__crud-actions">
                     <button (click)="openEditItemDialog(item)" mat-raised-button color="primary">{{'EDIT_BTN' | translate}}</button>
@@ -75,7 +75,7 @@
                 <mat-list-item class="comment comments-list__item">
                     <mat-icon class="comment__user-avatar" mat-list-icon>account_circle</mat-icon>
                     <div mat-line>
-                        <a class="comment__user-name" [routerLink]="['/', comment.authorVM.id]">{{ comment.authorVM.name }}</a> · 
+                        <a class="comment__user-name" [routerLink]="['/', comment.authorVm.id]">{{ comment.authorVm.name }}</a> · 
                         <span class="comment__creation-date">{{ comment.creationDate | date:'medium':'':dateLang }}</span>
                     </div>
                     <div class="comment__content" mat-line>{{ comment.text }}</div>

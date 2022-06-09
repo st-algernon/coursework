@@ -5,11 +5,8 @@ import { CollectionRoutingModule } from './collection-routing.module';
 import { CollectionPageComponent } from './collection-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TopicsService } from '../shared/services/topics.service';
-import { CollectionsService } from '../shared/services/collections.service';
 import { EditCollectionPageComponent } from './edit-collection-page/edit-collection-page.component';
 import { ItemPageComponent } from './item-page/item-page.component';
-import { CommentsService } from '../shared/services/comments.service';
 
 
 @NgModule({
@@ -24,9 +21,6 @@ import { CommentsService } from '../shared/services/comments.service';
     ReactiveFormsModule,
     SharedModule
   ],
-  providers: [
-    TopicsService,
-    CommentsService
-  ]
+  providers: [ ]
 })
 export class CollectionModule { }

@@ -5,9 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subscription } from 'rxjs';
-import { User } from 'src/app/shared/interfaces';
+import { UsersClient, UserVm } from 'src/app/shared/services/api.service';
 import { AuthStorage } from 'src/app/shared/services/auth.storage';
-import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-users-page',
@@ -16,7 +15,7 @@ import { UsersService } from 'src/app/shared/services/users.service';
 })
 export class UsersPageComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatTable) table: MatTable<User> | undefined;
+  @ViewChild(MatTable) table: MatTable<UserVm> | undefined;
 
   isButtonsDisabled = {
     adminBtn: true,
@@ -27,8 +26,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   isLoading: boolean = false;
   displayedColumns = ['checkbox', 'name', 'email', 'userrole', 'userstate'];
-  selection = new SelectionModel<User>(true);
-  users: User[] = [];
+  selection = new SelectionModel<UserVm>(true);
+  users: UserVm[] = [];
 
   allUsersCount: number | undefined;
   pageIndex: number = 0;
@@ -38,7 +37,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(
-    private usersService: UsersService,
+    private usersClient: UsersClient,
     private translate: TranslateService,
     private authStorage: AuthStorage
   ) { 
@@ -55,7 +54,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     this.loadUsersCount();
     this.subs.push(
       this.selection.changed.subscribe(
-        (change: SelectionChange<User>) => this.configActionButtons(change.source.selected)
+        (change: SelectionChange<UserVm>) => this.configActionButtons(change.source.selected)
       )
     );
   }
@@ -70,8 +69,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.subs.push(
-      this.usersService.getUsers(this.pageIndex + 1, this.pageSize).subscribe(
-        (response: User[]) => { 
+      this.usersClient.getUsers(this.pageIndex + 1, this.pageSize).subscribe(
+        (response: UserVm[]) => { 
           console.log(response);
           this.users = response 
           this.isLoading = false;
@@ -83,7 +82,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
   loadUsersCount() {
     this.subs.push(
-      this.usersService.getUsersCount().subscribe(
+      this.usersClient.getUsersCount().subscribe(
         (response: number) => this.allUsersCount = response
       )
     );
@@ -94,8 +93,8 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
     if(query.trim() != '') {
       this.subs.push(
-        this.usersService.searchUsers(query).subscribe(
-          (response: User[]) => this.users = response
+        this.usersClient.searchUsers(query).subscribe(
+          (response: UserVm[]) => this.users = response
         )
       )
     } else {
@@ -106,7 +105,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   appointAdmin() {
     this.selection.selected.forEach(su => {
       this.subs.push(
-        this.usersService.addAdmin(su.id).subscribe(
+        this.usersClient.addAdmin(su.id).subscribe(
           () => { 
             su.userRole = 'Admin';
             this.table?.renderRows();
@@ -119,7 +118,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   blockUser() {
     this.selection.selected.forEach(su => {
       this.subs.push(
-        this.usersService.blockUser(su.id).subscribe(
+        this.usersClient.blockUser(su.id).subscribe(
           () => {
             su.userState = 'Blocked';
             this.table?.renderRows();
@@ -133,7 +132,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   unblockUser() {
     this.selection.selected.forEach(su => {
       this.subs.push(
-        this.usersService.unblockUser(su.id).subscribe(
+        this.usersClient.unblockUser(su.id).subscribe(
           () => {
             su.userState = 'Active';
             this.table?.renderRows();
@@ -146,7 +145,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
   removeUser() {
     this.selection.selected.forEach(su => {
       this.subs.push(
-        this.usersService.removeUser(su.id).subscribe(
+        this.usersClient.removeUser(su.id).subscribe(
           () => { 
             this.users = this.users.filter(u => u !== su);
             this.table?.renderRows();
@@ -172,7 +171,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
       this.users.forEach(u => this.selection.select(u));
   }
 
-  configActionButtons(selectedUsers: User[]) {
+  configActionButtons(selectedUsers: UserVm[]) {
     if (selectedUsers.length > 0) {
       this._configRemoveButton(selectedUsers);
 
@@ -186,14 +185,14 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _configAdminButton(selectedUsers: User[]) {
+  private _configAdminButton(selectedUsers: UserVm[]) {
     if (selectedUsers.some(u => u.userRole == 'Admin'))
       this.isButtonsDisabled.adminBtn = true;
     else
       this.isButtonsDisabled.adminBtn = false;
   }
 
-  private _configBlockButton(selectedUsers: User[]) {
+  private _configBlockButton(selectedUsers: UserVm[]) {
     if (selectedUsers.some(u => u.userState == 'Blocked') 
         || selectedUsers.some(u => u.userRole == 'Admin'))
       this.isButtonsDisabled.blockBtn = true;
@@ -201,14 +200,14 @@ export class UsersPageComponent implements OnInit, OnDestroy {
       this.isButtonsDisabled.blockBtn = false;
   }
 
-  private _configUnblockButton(selectedUsers: User[]) {
+  private _configUnblockButton(selectedUsers: UserVm[]) {
     if (selectedUsers.some(u => u.userState == 'Active'))
       this.isButtonsDisabled.unblockBtn = true;
     else 
       this.isButtonsDisabled.unblockBtn = false;
   }
 
-  private _configRemoveButton(selectedUsers: User[]) {
+  private _configRemoveButton(selectedUsers: UserVm[]) {
     if (selectedUsers.some(u => u.userRole == 'Admin'))
       this.isButtonsDisabled.removeBtn = true;
     else 

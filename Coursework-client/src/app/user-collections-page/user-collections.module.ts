@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../shared/shared.module';
-import { TopicsService } from '../shared/services/topics.service';
 import { UserCollectionsPageComponent } from './user-collections-page.component';
 import { UserCollectionsRoutingModule } from './user-collections-routing.module';
 import { CreateCollectionPageComponent } from './create-collection-page/create-collection-page.component';
@@ -17,6 +16,6 @@ import { CreateCollectionPageComponent } from './create-collection-page/create-c
     UserCollectionsRoutingModule,
     SharedModule
   ],
-  providers: [TopicsService]
+  providers: []
 })
 export class UserCollectionsModule { }

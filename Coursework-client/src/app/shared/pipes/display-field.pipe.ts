@@ -4,7 +4,7 @@ import * as moment from 'moment';
 
 @Pipe({name: 'displayField'})
 export class DisplayFieldPipe implements PipeTransform {
-  transform(value: any, type: FieldTypes): string {
+  transform(value: any, type: string): string {
     switch (type) {
         case 'String':
           return value;

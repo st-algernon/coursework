@@ -7,11 +7,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { EditItemDialogComponent } from 'src/app/shared/components/edit-item-dialog/edit-item-dialog.component';
 import { CommentsHub } from 'src/app/shared/hubs/comments.hub';
-import { Item, Comment, User, CommentRequest } from 'src/app/shared/interfaces';
+import { CreateCommentCommand } from 'src/app/shared/interfaces';
+import { CommentsClient, CommentVm, ItemsClient, ItemVm, UserVm } from 'src/app/shared/services/api.service';
 import { AuthStorage } from 'src/app/shared/services/auth.storage';
-import { CommentsService } from 'src/app/shared/services/comments.service';
-import { ItemsService } from 'src/app/shared/services/items.service';
-import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-item-page',
@@ -21,9 +19,9 @@ import { UsersService } from 'src/app/shared/services/users.service';
 export class ItemPageComponent implements OnInit, OnDestroy {
   isSmallResolution?: boolean;
   dateLang: string = 'en';
-  item?: Item;
-  currentUser?: User;
-  comments: Comment[] = [];
+  item?: ItemVm;
+  currentUser?: UserVm;
+  comments: CommentVm[] = [];
   commentCtrl = new FormControl();
   subs: Subscription[] = [];
 
@@ -31,9 +29,8 @@ export class ItemPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private itemsService: ItemsService,
-    private usersService: UsersService,
-    private commentsService: CommentsService,
+    private itemsClient: ItemsClient,
+    private commentsClient: CommentsClient,
     private dialog: MatDialog,
     private router: Router,
     private commentsHub: CommentsHub,
@@ -61,17 +58,17 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     this.commentsHub.addReceivedCommentsListener();
 
     this.subs.push(
-      this.itemsService.getItem(itemId).subscribe(
-        (response: Item) => this.item = response
+      this.itemsClient.getItem(itemId).subscribe(
+        (response: ItemVm) => this.item = response
       ),
-      this.usersService.currentUser$.subscribe(
-        (response: User) => this.currentUser = response
+      this.commentsClient.getComments(itemId).subscribe(
+        (response: CommentVm[]) => this.comments = response
       ),
-      this.commentsService.getComments(itemId).subscribe(
-        (response: Comment[]) => this.comments = response
+      this.authStorage.currentUser$.subscribe(
+        (response: UserVm) => this.currentUser = response
       ),
       this.commentsHub.comment$.subscribe(
-        (response: Comment) => this.comments.unshift(response)
+        (response: CommentVm) => this.comments.unshift(response)
       )
     );
   }
@@ -85,15 +82,15 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   toggleLikeBtn() {
     if (this.item) {
       this.subs.push(
-        this.itemsService.likeItem(this.item.id).subscribe(
+        this.itemsClient.likeItem(this.item.id).subscribe(
           () => { 
             if (this.item) {
-              if (this.item.usersItemVM.isLiked) {
-                this.item.usersItemVM.isLiked = false;
-                this.item.usersItemVM.countOfLikes -= 1;
+              if (this.item.usersItemVm.isLiked) {
+                this.item.usersItemVm.isLiked = false;
+                this.item.usersItemVm.countOfLikes -= 1;
               } else {
-                this.item.usersItemVM.countOfLikes += 1;
-                this.item.usersItemVM.isLiked = true;
+                this.item.usersItemVm.countOfLikes += 1;
+                this.item.usersItemVm.isLiked = true;
               }
             }
           }
@@ -105,14 +102,14 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   deleteItem() {
     if (this.item?.id) {
       this.subs.push(
-        this.itemsService.deleteItem(this.item.id).subscribe(
+        this.itemsClient.removeItem(this.item.id).subscribe(
           () => this.router.navigate(['../../'],  { relativeTo: this.route })
         )
       );
     }
   }
 
-  openEditItemDialog(item: Item) {
+  openEditItemDialog(item: ItemVm) {
     this.dialog.open(EditItemDialogComponent, { 
       width: this.isSmallResolution ? '100%' : '50%', 
       data: item
@@ -122,7 +119,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   submitComment() {
     if (this.currentUser && this.item) {
 
-      const request: CommentRequest = {
+      const request: CreateCommentCommand = {
         text: this.commentCtrl.value,
         itemId: this.item.id,
         authorId: this.currentUser.id

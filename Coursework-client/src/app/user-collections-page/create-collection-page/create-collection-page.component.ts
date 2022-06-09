@@ -3,9 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CollectionFormComponent } from 'src/app/shared/components/collection-form/collection-form.component';
-import { Collection } from 'src/app/shared/interfaces';
+import { CollectionsClient, CollectionVm } from 'src/app/shared/services/api.service';
 import { AuthStorage } from 'src/app/shared/services/auth.storage';
-import { CollectionsService } from 'src/app/shared/services/collections.service';
 
 @Component({
   selector: 'app-create-collection-page',
@@ -18,7 +17,7 @@ export class CreateCollectionPageComponent implements OnInit, OnDestroy {
   @ViewChild(CollectionFormComponent) collectionForm?: CollectionFormComponent;
 
   constructor(
-    private collectionsService: CollectionsService,
+    private collectionsClient: CollectionsClient,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
     private authStorage: AuthStorage
@@ -41,12 +40,12 @@ export class CreateCollectionPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSubmit(collection: Collection) {
+  onSubmit(collection: CollectionVm) {
     if (this.collectionForm) {
       this.collectionForm.isLoading = true;
 
       this.subs.push(
-        this.collectionsService.createCollection(collection).subscribe(
+        this.collectionsClient.createCollection(collection).subscribe(
           () => {
             this.snackBar.open('The collection was created successfully', '', { duration: 3000 });
             

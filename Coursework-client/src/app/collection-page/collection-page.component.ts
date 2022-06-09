@@ -5,11 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AddItemDialogComponent } from 'src/app/shared/components/add-item-dialog/add-item-dialog.component';
-import { ItemsService } from 'src/app/shared/services/items.service';
-import { ShortCollection, ShortItem, Tag, User } from '../shared/interfaces';
+import { CollectionsClient, ItemsClient, ShortCollectionVm, ShortItemVm, TagVm, UserVm } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
-import { CollectionsService } from '../shared/services/collections.service';
-import { UsersService } from '../shared/services/users.service';
 
 @Component({
   selector: 'app-collection-page',
@@ -18,22 +15,21 @@ import { UsersService } from '../shared/services/users.service';
 })
 export class CollectionPageComponent implements OnInit {
   isSmallResolution?: boolean;
-  currentUser?: User;
-  collection?: ShortCollection;
-  collectionTags: Tag[] = [];
-  items: ShortItem[] = [];
+  currentUser?: UserVm;
+  collection?: ShortCollectionVm;
+  collectionTags: TagVm[] = [];
+  items: ShortItemVm[] = [];
   subs: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private collectionsService: CollectionsService,
-    private itemsService: ItemsService,
+    private collectionsClient: CollectionsClient,
+    private itemsClient: ItemsClient,
     private dialog: MatDialog,
     private router: Router,
     private translate: TranslateService,
     private authStorage: AuthStorage,
-    private responsive: BreakpointObserver,
-    private usersService: UsersService
+    private responsive: BreakpointObserver
   ) { 
     translate.addLangs(['en', 'ru']);
     translate.setDefaultLang('en');
@@ -47,17 +43,17 @@ export class CollectionPageComponent implements OnInit {
     const collectionId = this.route.snapshot.params['id'];
 
     this.subs.push(
-      this.collectionsService.getShortCollection(collectionId).subscribe(
-        (response: ShortCollection) => this.collection = response
+      this.collectionsClient.getShortCollection(collectionId).subscribe(
+        (response: ShortCollectionVm) => this.collection = response
       ),
-      this.collectionsService.getCollectionTags(collectionId).subscribe(
-        (response: Tag[]) => this.collectionTags = response
+      this.collectionsClient.getCollectionTags(collectionId).subscribe(
+        (response: TagVm[]) => this.collectionTags = response
       ),
-      this.itemsService.getShortItems(collectionId).subscribe(
-        (response: ShortItem[]) => this.items = response
+      this.itemsClient.getShortItems(collectionId).subscribe(
+        (response: ShortItemVm[]) => this.items = response
       ),
-      this.usersService.currentUser$.subscribe(
-        (response: User) => this.currentUser = response
+      this.authStorage.currentUser$.subscribe(
+        (response: UserVm) => this.currentUser = response
       )
     );
 
@@ -80,7 +76,7 @@ export class CollectionPageComponent implements OnInit {
   deleteCollection() {
     if (this.collection?.id) {
       this.subs.push(
-        this.collectionsService.deleteCollection(this.collection?.id).subscribe(
+        this.collectionsClient.removeCollection(this.collection?.id).subscribe(
           () => this.router.navigate(['/', this.currentUser?.id])
         )
       );

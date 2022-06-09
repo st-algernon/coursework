@@ -2,10 +2,9 @@ import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@an
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Item, ShortItem } from '../../interfaces';
-import { ItemsService } from '../../services/items.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ItemFormComponent } from '../item-form/item-form.component';
+import { ItemsClient, ShortItemVm } from '../../services/api.service';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -19,7 +18,7 @@ export class AddItemDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: string,
     private dialogRef: MatDialogRef<AddItemDialogComponent>,
-    private itemsService: ItemsService,
+    private itemsClient: ItemsClient,
     private snackBar: MatSnackBar,
     private router: Router
   ) { }
@@ -34,11 +33,11 @@ export class AddItemDialogComponent implements OnInit {
     );
   }
 
-  onSubmit(item: ShortItem) {
+  onSubmit(item: ShortItemVm) {
     this.isLoading = true;
 
     this.subs.push(
-      this.itemsService.addItem(item).subscribe(
+      this.itemsClient.createItem(item).subscribe(
         () => {
           this.isLoading = false;
           this.snackBar.open('The item was added successfully', '', { duration: 3000 });
