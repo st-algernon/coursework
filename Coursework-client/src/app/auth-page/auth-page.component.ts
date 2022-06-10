@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { AuthClient, LoginQuery, RegisterQuery } from '../shared/services/api.service';
+import { AuthClient, AuthResponse, LoginQuery, RegisterQuery } from '../shared/services/api.service';
 import { AuthStorage } from '../shared/services/auth.storage';
 
 @Component({
@@ -78,7 +78,8 @@ export class AuthPageComponent implements OnInit, OnDestroy {
 
     this.subs.push(
       this.authClient.login(request).subscribe(
-        () => {
+        (response: AuthResponse) => {
+          this.authStorage.setTokens(response);
           this.router.navigate(['']);
           this.submitted = false;
         }, 
@@ -105,7 +106,8 @@ export class AuthPageComponent implements OnInit, OnDestroy {
 
     this.subs.push(
       this.authClient.register(request).subscribe(
-        () => {
+        (response: AuthResponse) => {
+          this.authStorage.setTokens(response);
           this.router.navigate(['']);
           this.submitted = false;
         },

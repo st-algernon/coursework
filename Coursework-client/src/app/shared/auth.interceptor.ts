@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
-import { catchError, switchMap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 import { AuthClient, RefreshTokenQuery } from "./services/api.service";
 import { AuthStorage } from "./services/auth.storage";
 
@@ -31,6 +31,7 @@ export class AuthInterceptor implements HttpInterceptor{
                     };
 
                     return this.authClient.refreshToken(request).pipe(
+                        tap(this.authStorage.setTokens),
                         switchMap(() => next.handle(this._addTokenToHeader(req))),
                         catchError((err) => {
                             this.authStorage.logout();
