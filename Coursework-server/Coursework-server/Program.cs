@@ -26,8 +26,12 @@ var tokenValidationParameters = new TokenValidationParameters
 	ValidateIssuerSigningKey = true,
 	IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey()
 };
+var root = Directory.GetCurrentDirectory();
+var pathToFile = builder.Configuration.GetValue<string>("Logging:FileLogger:Path");
 
 // Add services to the container.
+builder.Logging.AddFile(root + pathToFile);
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddMediatR(typeof(Program));
