@@ -18,7 +18,7 @@ namespace Coursework_server.Controllers
         }
 
 		[HttpGet("current")]
-		[Authorize(Roles = "User")]
+		[Authorize]
 		public Task<UserVm> GetCurrentUser() =>
             _mediator.Send(new GetCurrentUserQuery(HttpContext.User.Identity?.Name), HttpContext.RequestAborted);
 
