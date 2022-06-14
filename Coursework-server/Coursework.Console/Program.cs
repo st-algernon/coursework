@@ -17,8 +17,9 @@ var connection = "Server=(localdb)\\mssqllocaldb;Database=CourseworkDB;Trusted_C
 var serviceProvider = new ServiceCollection()
     .AddCore(jwtConfig, connection)
     .AddSingleton<ConsoleApp>()
+    .AddLogging(Console.WriteLine)
     .BuildServiceProvider();
 
 //do the actual work here
-var app = serviceProvider.GetService<ConsoleApp>();
-app.Main();
+var app = serviceProvider.GetRequiredService<ConsoleApp>();
+await app.Main();
