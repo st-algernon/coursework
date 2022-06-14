@@ -16,10 +16,10 @@ var connection = "Server=(localdb)\\mssqllocaldb;Database=CourseworkDB;Trusted_C
 //setup our DI
 var serviceProvider = new ServiceCollection()
     .AddCore(jwtConfig, connection)
-    .AddSingleton<ConsoleApp>()
+    .AddSingleton<HomePage>()
     .AddLogging(Console.WriteLine)
     .BuildServiceProvider();
 
 //do the actual work here
-var app = serviceProvider.GetRequiredService<ConsoleApp>();
+var app = serviceProvider.GetRequiredService<HomePage>();
 await app.Main();
