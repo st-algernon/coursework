@@ -5,7 +5,6 @@ using Coursework.Core.Extensions.Decorators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Coursework.Core.Extensions;
 

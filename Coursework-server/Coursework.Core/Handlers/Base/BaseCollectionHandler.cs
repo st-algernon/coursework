@@ -38,7 +38,7 @@ internal abstract class BaseCollectionHandler
                         
         var currentUser = await Db.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(currentUserId), ct);
         
-        if (ownerId != currentUser?.Id || currentUser.UserRole != UserRole.Admin)
+        if (ownerId != currentUser?.Id && currentUser?.UserRole == UserRole.User)
         {
             throw new InvalidOperationException();
         }
