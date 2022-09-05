@@ -10,7 +10,20 @@
 // ***********************************************
 //
 //
-Cypress.Commands.add('login', (email, password) => {
+
+declare namespace Cypress {
+  interface Chainable<Subject> {
+     login(email: string, password: string): Chainable<any>
+    /**
+     * Creates one Todo using UI
+     * @example
+     * cy.createTodo('new item')
+     */
+    createTodo(title: string): Chainable<any>
+  }
+}
+
+Cypress.Commands.add('login', (email: string, password: string) => {
     cy.get('.header__login').click();
     cy.get("input[type=email]").type(email);
     cy.get("input[type=password]").type(password).type("{enter}");

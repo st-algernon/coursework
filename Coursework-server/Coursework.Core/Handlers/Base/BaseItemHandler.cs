@@ -68,7 +68,7 @@ internal abstract class BaseItemHandler
         var collection = await Db.Collections
             .FirstOrDefaultAsync(c => c.Id == collectionId, ct);
 
-        if (collection?.OwnerId != currentUser?.Id || currentUser?.UserRole != UserRole.Admin)
+        if (collection?.OwnerId != currentUser?.Id && currentUser?.UserRole == UserRole.User)
         {
             throw new InvalidOperationException();
         }
